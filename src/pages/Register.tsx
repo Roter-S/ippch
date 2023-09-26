@@ -1,0 +1,134 @@
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { register } from "../services/firebase";
+import { useUserContext } from "../context/UserContext";
+import { useRedirectActiveUser } from "../hooks/useRedirectActiveUser";
+import { Link } from "react-router-dom";
+
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { LoadingButton } from "@mui/lab";
+
+const Register = () => {
+  const { user } = useUserContext();
+
+  // alternativa con hook
+  useRedirectActiveUser(user, "/dashboard");
+
+  const onSubmit = async (
+    { email, password }: { email: string; password: string },
+    { setSubmitting, setErrors, resetForm }: any
+  ) => {
+    try {
+      await register({ email, password });
+      resetForm();
+    } catch (error: any) {
+      const authError = error as { code: string };
+      if (authError.code === "auth/email-already-in-use") {
+        setErrors({ email: "Correo electrónico ya en uso" });
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Email no válido").required("Email obligatorio"),
+    password: Yup.string()
+      .trim()
+      .min(6, "Mínimo 6 carácteres")
+      .required("Password obligatorio"),
+  });
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+      }}
+    >
+      <Card
+        sx={{
+          maxWidth: 400,
+          textAlign: "center",
+          my: "auto",
+          mx: "auto",
+        }}
+      >
+        <CardContent>
+          <Avatar sx={{ mx: "auto", bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Registro
+          </Typography>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+          >
+            {({ isSubmitting, errors }) => (
+              <Form>
+                <Field
+                  as={TextField}
+                  sx={{ mb: 3 }}
+                  fullWidth
+                  label="Email Address"
+                  id="email"
+                  type="text"
+                  placeholder="Ingrese email"
+                  name="email"
+                  error={Boolean(errors.email)}
+                  helperText={errors.email}
+                />
+
+                <Field
+                  as={TextField}
+                  fullWidth
+                  label="Password"
+                  id="password"
+                  type="password"
+                  placeholder="Ingrese contraseña"
+                  name="password"
+                  error={Boolean(errors.password)}
+                  helperText={errors.password}
+                />
+
+                <LoadingButton
+                  variant="contained"
+                  color="secondary"
+                  sx={{ mt: 3, mb: 2 }}
+                  fullWidth
+                  type="submit"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                >
+                  Register
+                </LoadingButton>
+                <Grid container>
+                  <Grid item xs>
+                    <Button component={Link} to="/" color="secondary">
+                      ¿Ya tienes cuenta? Accede aquí
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+};
+
+export default Register;
