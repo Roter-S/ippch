@@ -1,27 +1,64 @@
-# React + TypeScript + Vite
+# IPPCH
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+IPPCH is a web application designed to streamline the administration and workflow in evangelical churches. This comprehensive tool provides religious leaders, church members, and administrators with a centralized platform to efficiently manage all church activities and resources.
 
-Currently, two official plugins are available:
+## Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Member Management**: Register and manage all church members.
 
-## Expanding the ESLint configuration
+- **Event Calendar**: Keep a record of all church events, including services, meetings, and special activities.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Multimedia Resources**: Store and share sermons, music, and other multimedia resources.
 
-- Configure the top-level `parserOptions` property like this:
+- **Communication**: Facilitate internal communication among church members.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+- **Donation Management**: Administer member donations and contributions.
+
+## Technologies Used
+
+- **Frontend**: The application is built with [React](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/), using [SWC](https://swc.rs/) as the transpiler.
+
+- **Backend**: The database and authentication are implemented using [Firebase](https://firebase.google.com/), with Firestore for data storage and Firebase Auth for authentication.
+
+- **File Storage**: We use [Firebase Storage](https://firebase.google.com/products/storage) for multimedia file storage.
+
+- **Hosting**: The application is hosted on a suitable hosting service. Please replace this with the actual hosting service you are using, such as [Firebase Hosting](https://firebase.google.com/products/hosting), [Netlify](https://www.netlify.com/), or any other hosting platform.
+
+- **Build Tool**: [Vite](https://vitejs.dev/) is used as the build tool for the frontend. Vite is known for its speed and efficiency in the development process.
+
+## Installation and Usage
+
+### Prerequisites
+
+Before you begin, make sure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org/) and npm (Node Package Manager)
+- Git
+
+### Installation
+
+1. Clone this repository to your local machine.
+
+   ```bash
+   https://github.com/Roter-S/ippch.git
+   ```
+
+2. Navigate to the project directory.
+
+   ```bash
+   cd ippch
+   ```
+
+3. Install the project's dependencies:
+
+   ```bash
+   npm install
+   ```
+
+### Development Server
+
+Start the development server with the following command.
+
+```bash
+npm run dev
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
