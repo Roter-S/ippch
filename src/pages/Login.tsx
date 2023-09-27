@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { LoadingButton } from "@mui/lab";
+import SignInWithGoogle from "../components/Common/SignInWithGoogle";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,11 +42,13 @@ const Login = () => {
         if (authErrorCode === "auth/user-not-found") {
           setErrors({ email: "Email no registrado" });
         }
+        if (authErrorCode === "auth/invalid-login-credentials") {
+          setErrors({ email: "Credenciales Invalidas" });
+        }
         if (authErrorCode === "auth/wrong-password") {
           setErrors({ password: "Contraseña incorrecta" });
         }
       }
-      console.log(error);
     } finally {
       setSubmitting(false);
     }
@@ -67,7 +70,7 @@ const Login = () => {
         display: "flex",
       }}
     >
-      <Card
+      <Box
         sx={{
           maxWidth: 400,
           textAlign: "center",
@@ -75,67 +78,70 @@ const Login = () => {
           mx: "auto",
         }}
       >
-        <CardContent>
-          <Avatar sx={{ mx: "auto", bgcolor: "primary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+        <Card>
+          <CardContent>
+            <Avatar sx={{ mx: "auto", bgcolor: "primary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography sx={{ mt: 3, mb: 2 }} component="h1" variant="h5">
+              Inicio de Sesión
+            </Typography>
 
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={onSubmit}
-            validationSchema={validationSchema}
-          >
-            {({ isSubmitting, errors }) => (
-              <Form>
-                <Field
-                  as={TextField}
-                  fullWidth
-                  sx={{ mb: 3 }}
-                  label="Email Address"
-                  id="email"
-                  type="text"
-                  placeholder="Ingrese email"
-                  name="email"
-                  error={Boolean(errors?.email)}
-                  helperText={errors?.email}
-                />
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              onSubmit={onSubmit}
+              validationSchema={validationSchema}
+            >
+              {({ isSubmitting, errors }) => (
+                <Form>
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    sx={{ mb: 3 }}
+                    label="Email Address"
+                    id="email"
+                    type="text"
+                    placeholder="Ingrese email"
+                    name="email"
+                    error={Boolean(errors?.email)}
+                    helperText={errors?.email}
+                  />
 
-                <Field
-                  as={TextField}
-                  fullWidth
-                  label="Password"
-                  id="password"
-                  type="password"
-                  placeholder="Ingrese contraseña"
-                  name="password"
-                  error={Boolean(errors?.password)}
-                  helperText={errors?.password}
-                />
-                <LoadingButton
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  fullWidth
-                  type="submit"
-                  disabled={isSubmitting}
-                  loading={isSubmitting}
-                >
-                  Login
-                </LoadingButton>
-                <Grid container>
-                  <Grid item xs>
-                    <Button color="primary" component={Link} to="/register">
-                      ¿No tienes cuenta? Registrate
-                    </Button>
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    label="Password"
+                    id="password"
+                    type="password"
+                    placeholder="Ingrese contraseña"
+                    name="password"
+                    error={Boolean(errors?.password)}
+                    helperText={errors?.password}
+                  />
+                  <LoadingButton
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    fullWidth
+                    type="submit"
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
+                  >
+                    Iniciar Sesión
+                  </LoadingButton>
+                  <Grid container>
+                    <Grid item xs>
+                      <Button color="primary" component={Link} to="/register">
+                        ¿No tienes cuenta? Registrate
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Form>
-            )}
-          </Formik>
-        </CardContent>
-      </Card>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
+        </Card>
+        <SignInWithGoogle />
+      </Box>
     </Box>
   );
 };
