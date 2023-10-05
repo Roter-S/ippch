@@ -12,6 +12,7 @@ import Loader from "../components/Common/Loader";
 interface User {
   uid: string;
   email: string | null;
+  photoURL: string | null;
 }
 
 interface UserContextType {
@@ -66,6 +67,7 @@ function mapFirebaseUser(firebaseUser: FirebaseUser): User {
   return {
     uid: firebaseUser.uid,
     email: firebaseUser.email,
+    photoURL: firebaseUser.photoURL,
     // ... other properties
   };
 }

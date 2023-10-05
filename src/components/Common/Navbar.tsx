@@ -41,7 +41,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
   };
 
   const { user } = useUserContext();
-  user ? user.email : null;
 
   return (
     <AppBar
@@ -67,7 +66,11 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="" />
+              {user && user.photoURL ? (
+                <Avatar alt="photoURL" src={user.photoURL} />
+              ) : (
+                <Avatar alt="photoURL" src="" />
+              )}
             </IconButton>
 
             <Menu
