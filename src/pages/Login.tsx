@@ -41,12 +41,10 @@ const Login = () => {
         const authErrorCode = error.code;
         if (authErrorCode === "auth/user-not-found") {
           setErrors({ email: "Email no registrado" });
-        }
-        if (authErrorCode === "auth/invalid-login-credentials") {
-          setErrors({ email: "Credenciales Invalidas" });
-        }
-        if (authErrorCode === "auth/wrong-password") {
+        } else if (authErrorCode === "auth/wrong-password") {
           setErrors({ password: "Contraseña incorrecta" });
+        } else if (authErrorCode === "auth/invalid-login-credentials") {
+          setErrors({ email: "Credenciales Invalidas" });
         }
       }
     } finally {

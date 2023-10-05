@@ -7,6 +7,7 @@ import {
   signOut,
   UserCredential,
 } from "firebase/auth";
+import { createUserInFirestore } from "../utils/firestoreUtils";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -35,8 +36,12 @@ const auth: Auth = getAuth(app);
 export const login = ({ email, password }: { email: string; password: string }): Promise<UserCredential> =>
   signInWithEmailAndPassword(auth, email, password);
 
-export const register = ({ email, password }: { email: string; password: string }): Promise<UserCredential> =>
-  createUserWithEmailAndPassword(auth, email, password);
+export const register = async ({ email, password }: { email: string; password: string; }): Promise<UserCredential> => {
+  const auth = getAuth();
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  await createUserInFirestore(userCredential.user);
+  return userCredential;
+};
 
 export const logOut = (): Promise<void> => signOut(auth);
 
