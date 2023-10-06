@@ -13,7 +13,7 @@ const xLabels = [
   "Page G",
 ];
 
-export default function ChartArea({ sizeHeight }: { sizeHeight: number }) {
+export default function ChartArea() {
   return (
     <Grid xs={12} sm={9}>
       <Box
@@ -26,7 +26,7 @@ export default function ChartArea({ sizeHeight }: { sizeHeight: number }) {
         }}
       >
         <LineChart
-          height={sizeHeight}
+          height={600}
           series={[
             {
               data: uData,

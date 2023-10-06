@@ -27,7 +27,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function ChartPie({ sizeHeight }: { sizeHeight: number }) {
+export default function ChartPie() {
   return (
     <Grid xs={12} sm={3}>
       <Box
@@ -39,7 +39,7 @@ export default function ChartPie({ sizeHeight }: { sizeHeight: number }) {
           borderRadius: "10px",
         }}
       >
-        <PieChart height={sizeHeight} series={[{ data, innerRadius: 80 }]}>
+        <PieChart height={600} series={[{ data, innerRadius: 80 }]}>
           <PieCenterLabel>Center label</PieCenterLabel>
         </PieChart>
       </Box>

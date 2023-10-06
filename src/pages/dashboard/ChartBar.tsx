@@ -14,7 +14,7 @@ const xLabels = [
   "Page G",
 ];
 
-export default function ChartBar({ sizeHeight }: { sizeHeight: number }) {
+export default function ChartBar() {
   return (
     <Grid xs={12} sm={9}>
       <Box
@@ -27,7 +27,7 @@ export default function ChartBar({ sizeHeight }: { sizeHeight: number }) {
         }}
       >
         <BarChart
-          height={sizeHeight}
+          height={600}
           series={[
             { data: pData, label: "pv", id: "pvId" },
             { data: uData, label: "uv", id: "uvId" },
