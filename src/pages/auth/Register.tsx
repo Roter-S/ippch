@@ -1,9 +1,9 @@
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
-import { login } from "../services/firebase";
-import { Link, useNavigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
+import { register } from "../../services/firebase";
+import { useUserContext } from "../../context/UserContext";
+import { useRedirectActiveUser } from "../../hooks/useRedirectActiveUser";
+import { Link } from "react-router-dom";
 
 import {
   Avatar,
@@ -17,35 +17,25 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { LoadingButton } from "@mui/lab";
-import SignInWithGoogle from "../components/Common/SignInWithGoogle";
+import SignInWithGoogle from "../../components/common/SignInWithGoogle";
 
-const Login = () => {
-  const navigate = useNavigate();
+const Register = () => {
   const { user } = useUserContext();
 
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user]);
+  // alternativa con hook
+  useRedirectActiveUser(user, "/admin");
 
   const onSubmit = async (
     { email, password }: { email: string; password: string },
     { setSubmitting, setErrors, resetForm }: any
   ) => {
     try {
-      await login({ email, password });
+      await register({ email, password });
       resetForm();
     } catch (error: any) {
-      if (typeof error.code === "string") {
-        const authErrorCode = error.code;
-        if (authErrorCode === "auth/user-not-found") {
-          setErrors({ email: "Email no registrado" });
-        } else if (authErrorCode === "auth/wrong-password") {
-          setErrors({ password: "Contraseña incorrecta" });
-        } else if (authErrorCode === "auth/invalid-login-credentials") {
-          setErrors({ email: "Credenciales Invalidas" });
-        }
+      const authError = error as { code: string };
+      if (authError.code === "auth/email-already-in-use") {
+        setErrors({ email: "Correo electrónico ya en uso" });
       }
     } finally {
       setSubmitting(false);
@@ -53,11 +43,11 @@ const Login = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Email no válido").required("Email requerido"),
+    email: Yup.string().email("Email no válido").required("Email obligatorio"),
     password: Yup.string()
       .trim()
-      .min(6, "Mínimo 6 caracteres")
-      .required("Contraseña requerida"),
+      .min(6, "Mínimo 6 carácteres")
+      .required("Password obligatorio"),
   });
 
   return (
@@ -82,9 +72,8 @@ const Login = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography sx={{ mt: 3, mb: 2 }} component="h1" variant="h5">
-              Inicio de Sesión
+              Registrarse
             </Typography>
-
             <Formik
               initialValues={{ email: "", password: "" }}
               onSubmit={onSubmit}
@@ -94,15 +83,15 @@ const Login = () => {
                 <Form>
                   <Field
                     as={TextField}
-                    fullWidth
                     sx={{ mb: 3 }}
+                    fullWidth
                     label="Email Address"
                     id="email"
                     type="text"
                     placeholder="Ingrese email"
                     name="email"
-                    error={Boolean(errors?.email)}
-                    helperText={errors?.email}
+                    error={Boolean(errors.email)}
+                    helperText={errors.email}
                   />
 
                   <Field
@@ -113,23 +102,25 @@ const Login = () => {
                     type="password"
                     placeholder="Ingrese contraseña"
                     name="password"
-                    error={Boolean(errors?.password)}
-                    helperText={errors?.password}
+                    error={Boolean(errors.password)}
+                    helperText={errors.password}
                   />
+
                   <LoadingButton
                     variant="contained"
+                    color="primary"
                     sx={{ mt: 3, mb: 2 }}
                     fullWidth
                     type="submit"
                     disabled={isSubmitting}
                     loading={isSubmitting}
                   >
-                    Iniciar Sesión
+                    Register
                   </LoadingButton>
                   <Grid container>
                     <Grid item xs>
-                      <Button color="primary" component={Link} to="/register">
-                        ¿No tienes cuenta? Registrate
+                      <Button component={Link} to="/" color="primary">
+                        ¿Ya tienes cuenta? Accede aquí
                       </Button>
                     </Grid>
                   </Grid>
@@ -144,4 +135,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

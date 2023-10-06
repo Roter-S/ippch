@@ -7,7 +7,7 @@ import {
 } from "react";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "../services/firebase";
-import Loader from "../components/Common/Loader";
+import Loader from "../components/common/Loader";
 
 interface User {
   uid: string;
@@ -68,6 +68,5 @@ function mapFirebaseUser(firebaseUser: FirebaseUser): User {
     uid: firebaseUser.uid,
     email: firebaseUser.email,
     photoURL: firebaseUser.photoURL,
-    // ... other properties
   };
 }

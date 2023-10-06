@@ -3,8 +3,8 @@ import { useUserContext } from "../../context/UserContext";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Navbar from "../../components/Common/Navbar";
-import MuiDrawer from "../Common/MUIDrawer";
+import Navbar from "../common/Navbar";
+import MuiDrawer from "../common/drawer/MUIDrawer";
 
 const drawerWidth = 240;
 
@@ -34,7 +34,7 @@ const Private: React.FC<Props> = (props) => {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        aria-label="options folders"
       >
         <MuiDrawer
           mobileOpen={mobileOpen}
@@ -47,7 +47,7 @@ const Private: React.FC<Props> = (props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 5,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
