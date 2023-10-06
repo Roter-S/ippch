@@ -4,7 +4,7 @@ import RootLayout from "../components/layouts/RootLayout";
 import PrivateLayout from "../components/layouts/PrivateLayout";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
 import User from "../pages/Users";
 
 export const router = createBrowserRouter([

@@ -11,10 +11,10 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { LoadingButton } from "@mui/lab";
 import SignInWithGoogle from "../../components/common/SignInWithGoogle";
@@ -127,7 +127,7 @@ const Login = () => {
                     Iniciar Sesión
                   </LoadingButton>
                   <Grid container>
-                    <Grid item xs>
+                    <Grid xs={12}>
                       <Button color="primary" component={Link} to="/register">
                         ¿No tienes cuenta? Registrate
                       </Button>

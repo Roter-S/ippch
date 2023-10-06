@@ -47,7 +47,8 @@ const Private: React.FC<Props> = (props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 5,
+          px: 5,
+          py: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
