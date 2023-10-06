@@ -43,7 +43,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           background: '#101935',
-          borderRadius: '15px',
+          borderRadius: '10px',
           border: '1px solid #232E4F',
           boxShadow: "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
         }
@@ -52,8 +52,10 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: 'transparent',
-          boxShadow: 'none',
+          backgroundColor: "rgba(16, 25, 53, 0.7)",
+          backdropFilter: "blur(10px)",
+          boxShadow: "0px 0px 20px 0px rgba(0,0,0,0.4)",
+          borderRadius: "10px",
         }
       }
     },
@@ -61,6 +63,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           background: '#101935',
+          backdropFilter: "blur(10px)",
           boxShadow: 'none',
         }
       }

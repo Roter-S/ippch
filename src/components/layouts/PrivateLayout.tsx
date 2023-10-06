@@ -26,7 +26,7 @@ const Private: React.FC<Props> = (props) => {
     window !== undefined ? () => window().document.body : undefined;
 
   return user ? (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", px: "18px", py: "25px" }}>
       <Navbar
         drawerWidth={drawerWidth}
         handleDrawerToggle={handleDrawerToggle}
@@ -47,8 +47,6 @@ const Private: React.FC<Props> = (props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          px: 5,
-          py: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >

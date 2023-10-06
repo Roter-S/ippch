@@ -1,6 +1,5 @@
 .isActive{
-    border-left: 3px solid #880e4f;
-    background-color: #d81b60;
-    padding-left: 10px;
+    border-left: 3px solid #0a3068;
+    background-color: #030e1e;
     transition: all 0.3s ease-in-out;
 }

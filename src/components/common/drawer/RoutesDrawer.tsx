@@ -16,20 +16,48 @@ const RoutesDrawer = () => {
       <Toolbar>Logo</Toolbar>
       <List>
         {[
-          { title: "Dashboard", icon: <DashboardIcon />, to: "/admin" },
-          { title: "Usuarios", icon: <GroupIcon />, to: "/admin/users" },
+          {
+            title: "Dashboard",
+            icon: <DashboardIcon />,
+            to: "/admin",
+          },
+          {
+            title: "Usuarios",
+            icon: <GroupIcon />,
+            to: "/admin/users",
+          },
         ].map((text, index) => (
-          <ListItem key={index} disablePadding>
+          <ListItem
+            key={index}
+            sx={{
+              "& .MuiListItemButton-root, & .MuiListItemIcon-root, & .MuiListItemText-root":
+                {
+                  borderTopRightRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                  color: "#dfdfdf",
+                },
+              "& .isActive": {
+                "& .MuiListItemIcon-root, & .MuiListItemText-root": {
+                  color: "#1e88e5",
+                },
+              },
+              "&:hover .MuiListItemButton-root": {
+                borderTopRightRadius: "10px",
+                borderBottomRightRadius: "10px",
+                backgroundColor: "#0a3068",
+              },
+            }}
+            disablePadding
+          >
             <NavLink
               to={text.to}
               style={{
                 textDecoration: "none",
-                color: "inherit",
-                width: "100%",
+                width: "95%",
+                borderTopRightRadius: "10px",
+                borderBottomRightRadius: "10px",
               }}
-              className={
-                location.pathname === text.to ? "isActive" : "isPending"
-              }
+              className={location.pathname === text.to ? "isActive" : ""}
             >
               <ListItemButton>
                 <ListItemIcon>{text.icon}</ListItemIcon>

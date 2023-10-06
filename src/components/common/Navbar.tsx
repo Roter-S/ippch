@@ -46,8 +46,9 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
     <AppBar
       position="fixed"
       sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
-        ml: { sm: `${drawerWidth}px` },
+        width: { sm: `calc(98.1% - ${drawerWidth}px)` },
+        mr: { sm: "18.5px" },
+        mt: "10px",
       }}
     >
       <Container maxWidth="xl">

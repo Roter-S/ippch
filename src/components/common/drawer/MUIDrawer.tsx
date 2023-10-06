@@ -19,8 +19,10 @@ const MuiDrawer: React.FC<MuiDrawerProps> = ({
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      aria-label="mailbox folders"
+      sx={{
+        width: { sm: drawerWidth },
+        flexShrink: { sm: 0 },
+      }}
     >
       <Drawer
         container={container}
@@ -46,8 +48,9 @@ const MuiDrawer: React.FC<MuiDrawerProps> = ({
           display: { xs: "none", sm: "block" },
           "& .MuiDrawer-paper": {
             width: drawerWidth,
-            background: "transparent",
-            borderRight: "1px solid #232E4F",
+            border: "none",
+            backgroundColor: "#101935",
+            boxShadow: "0px 0px 20px 0px rgba(0,0,0,0.4)",
           },
         }}
         open
