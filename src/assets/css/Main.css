@@ -1,12 +1,47 @@
-.isActive{
-    border-left: 3px solid #d81b60;
-    background-color: #030e1e;
-    transition: all 0.3s ease-in-out;
+.isActive {
+  border-left: 3px solid #d81b60;
+  background-color: #030e1e;
+  transition: all 0.3s ease-in-out;
 }
-.avatar{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
-```
+
+.dropzone {
+  border: 2px dashed gray;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dropzone.dragging {
+  border-color: green;
+}
+.image-container {
+  margin: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.uploaded-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}

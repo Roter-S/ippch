@@ -8,6 +8,7 @@ import {
   UserCredential,
 } from "firebase/auth";
 import { createOrUpdateDocument } from "../utils/firestoreUtils";
+import { getStorage } from "firebase/storage";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -46,3 +47,5 @@ export const register = async ({ email, password }: { email: string; password: s
 export const logOut = (): Promise<void> => signOut(auth);
 
 export { auth };
+
+export const storage = getStorage(app);
