@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/router";
 
-import { ThemeProvider } from "@emotion/react";
-import { CssBaseline } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";

@@ -76,7 +76,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
 
             <Menu
               sx={{ mt: "45px" }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
               keepMounted
               anchorOrigin={{

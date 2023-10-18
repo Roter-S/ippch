@@ -16,7 +16,7 @@ const xLabels = [
 
 export default function ChartBar() {
   return (
-    <Grid xs={12} sm={9}>
+    <Grid xs={12} sm={8}>
       <Box
         sx={{
           width: "100%",
@@ -27,7 +27,7 @@ export default function ChartBar() {
         }}
       >
         <BarChart
-          height={600}
+          height={450}
           series={[
             { data: pData, label: "pv", id: "pvId" },
             { data: uData, label: "uv", id: "uvId" },

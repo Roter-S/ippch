@@ -25,7 +25,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/admin");
+      navigate("/admin/dashboard");
     }
   }, [user]);
 
@@ -128,7 +128,11 @@ const Login = () => {
                   </LoadingButton>
                   <Grid container>
                     <Grid xs={12}>
-                      <Button color="primary" component={Link} to="/register">
+                      <Button
+                        color="primary"
+                        component={Link}
+                        to="/admin/register"
+                      >
                         ¿No tienes cuenta? Registrate
                       </Button>
                     </Grid>

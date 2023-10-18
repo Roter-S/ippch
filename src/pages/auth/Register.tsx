@@ -119,7 +119,7 @@ const Register = () => {
                   </LoadingButton>
                   <Grid container>
                     <Grid xs={12}>
-                      <Button component={Link} to="/" color="primary">
+                      <Button component={Link} to="/admin" color="primary">
                         ¿Ya tienes cuenta? Accede aquí
                       </Button>
                     </Grid>

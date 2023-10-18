@@ -19,7 +19,7 @@ const RoutesDrawer = () => {
           {
             title: "Dashboard",
             icon: <DashboardIcon />,
-            to: "/admin",
+            to: "/admin/dashboard",
           },
           {
             title: "Usuarios",
@@ -32,8 +32,6 @@ const RoutesDrawer = () => {
             sx={{
               "& .MuiListItemButton-root, & .MuiListItemIcon-root, & .MuiListItemText-root":
                 {
-                  borderTopRightRadius: "10px",
-                  borderBottomRightRadius: "10px",
                   color: "#dfdfdf",
                 },
               "& .isActive": {
@@ -42,8 +40,6 @@ const RoutesDrawer = () => {
                 },
               },
               "&:hover .MuiListItemButton-root": {
-                borderTopRightRadius: "10px",
-                borderBottomRightRadius: "10px",
                 backgroundColor: "#0a3068",
               },
             }}
@@ -53,9 +49,7 @@ const RoutesDrawer = () => {
               to={text.to}
               style={{
                 textDecoration: "none",
-                width: "95%",
-                borderTopRightRadius: "10px",
-                borderBottomRightRadius: "10px",
+                width: "100%",
               }}
               className={location.pathname === text.to ? "isActive" : ""}
             >

@@ -10,6 +10,8 @@ const data = [
   { value: 10, label: "B" },
   { value: 15, label: "C" },
   { value: 20, label: "D" },
+  { value: 20, label: "E" },
+  { value: 10, label: "F" },
 ];
 const StyledText = styled("text")(({ theme }) => ({
   fill: theme.palette.text.primary,
@@ -29,7 +31,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
 
 export default function ChartPie() {
   return (
-    <Grid xs={12} sm={3}>
+    <Grid xs={12} sm={4}>
       <Box
         sx={{
           width: "100%",
@@ -39,7 +41,18 @@ export default function ChartPie() {
           borderRadius: "10px",
         }}
       >
-        <PieChart height={600} series={[{ data, innerRadius: 80 }]}>
+        <PieChart
+          colors={[
+            "#64b5f6",
+            "#f06292",
+            "#fff176",
+            "#b3e5fc",
+            "#80cbc4",
+            "#e57373",
+          ]}
+          height={450}
+          series={[{ data, innerRadius: 80 }]}
+        >
           <PieCenterLabel>Center label</PieCenterLabel>
         </PieChart>
       </Box>

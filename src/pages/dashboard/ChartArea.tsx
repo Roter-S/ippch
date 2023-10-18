@@ -15,7 +15,7 @@ const xLabels = [
 
 export default function ChartArea() {
   return (
-    <Grid xs={12} sm={9}>
+    <Grid xs={12} sm={8}>
       <Box
         sx={{
           width: "100%",
@@ -26,7 +26,7 @@ export default function ChartArea() {
         }}
       >
         <LineChart
-          height={600}
+          height={450}
           series={[
             {
               data: uData,
@@ -34,7 +34,7 @@ export default function ChartArea() {
               area: true,
               stack: "total",
               showMark: false,
-              color: "#8884d8",
+              color: "#64b5f6",
             },
             {
               data: uData,
@@ -42,7 +42,7 @@ export default function ChartArea() {
               area: true,
               stack: "total",
               showMark: false,
-              color: "#82ca9d",
+              color: "#fff176",
             },
           ]}
           xAxis={[{ scaleType: "point", data: xLabels }]}

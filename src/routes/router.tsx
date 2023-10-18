@@ -9,7 +9,7 @@ import User from "../pages/Users";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/admin",
     element: <RootLayout />,
     children: [
       {
@@ -21,11 +21,11 @@ export const router = createBrowserRouter([
         element: <Register />,
       },
       {
-        path: "admin",
         element: <PrivateLayout />,
         children: [
           {
             index: true,
+            path: "dashboard",
             element: <Dashboard />,
           },
           {

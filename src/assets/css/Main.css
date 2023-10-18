@@ -1,5 +1,12 @@
 .isActive{
-    border-left: 3px solid #0a3068;
+    border-left: 3px solid #d81b60;
     background-color: #030e1e;
     transition: all 0.3s ease-in-out;
 }
+.avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+```

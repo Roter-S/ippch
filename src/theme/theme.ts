@@ -67,7 +67,15 @@ const theme = createTheme({
           boxShadow: 'none',
         }
       }
-    }
+    },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "rgba(16, 25, 53, 0.7)",
+          backdropFilter: "blur(10px)",
+        }
+      }
+    },
   },
 });
 
