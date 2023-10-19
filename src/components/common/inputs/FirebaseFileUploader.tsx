@@ -1,6 +1,10 @@
 import React, { useState, ChangeEvent, DragEvent } from "react";
-import Stack from "@mui/material/Stack";
-import { Container, IconButton } from "@mui/material";
+import {
+  IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface FirebaseFileUploaderProps {
@@ -70,49 +74,58 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 8 }}>
-      <Stack direction="column" alignItems="center" spacing={2}>
-        <label htmlFor="upload-image" style={{ cursor: "pointer" }}>
-          <div
-            id="upload-dropzone"
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className={`dropzone ${dragging ? "dragging" : ""}`} // Clases CSS para estilos
-          >
-            {dragging ? (
-              <p>Suelta aquí los archivos</p>
-            ) : (
-              <p>
-                Arrastra y suelta tus archivos aquí o haz clic para
-                seleccionarlos.
-              </p>
-            )}
-            <input
-              id="upload-image"
-              type="file"
-              accept={acceptTypes}
-              onChange={handleFileUpload}
-              multiple={multiple}
-              style={{ display: "none" }}
-            />
-          </div>
-        </label>
+    <>
+      <label htmlFor="upload-image" style={{ cursor: "pointer" }}>
+        <div
+          id="upload-dropzone"
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          className={`dropzone ${dragging ? "dragging" : ""}`}
+        >
+          {dragging ? (
+            <p>Suelta aquí los archivos</p>
+          ) : (
+            <p>
+              Arrastra y suelta tus archivos aquí o haz clic para
+              seleccionarlos.
+            </p>
+          )}
+          <input
+            id="upload-image"
+            type="file"
+            accept={acceptTypes}
+            onChange={handleFileUpload}
+            multiple={multiple}
+            style={{ display: "none" }}
+          />
+        </div>
+      </label>
+      <ImageList sx={{ width: 500, height: 450 }}>
         {imageUrls.map((imageUrl, index) => (
-          <div key={index} className="image-container">
+          <ImageListItem key={index}>
             <img
+              srcSet={imageUrl}
               src={imageUrl}
-              alt={`Uploaded Image ${index}`}
-              className="uploaded-image"
+              alt={imageUrl}
+              loading="lazy"
             />
-            <IconButton onClick={() => handleDeleteImage(index)}>
-              <DeleteIcon />
-            </IconButton>
-          </div>
+            <ImageListItemBar
+              actionIcon={
+                <IconButton
+                  sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                  aria-label={"delete"}
+                  onClick={() => handleDeleteImage(index)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              }
+            />
+          </ImageListItem>
         ))}
-      </Stack>
-    </Container>
+      </ImageList>
+    </>
   );
 };
 

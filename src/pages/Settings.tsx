@@ -13,12 +13,19 @@ const Settings = () => {
         padding: "20px",
       }}
     >
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h4" marginBottom={3}>
         Configuración
       </Typography>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid xs={6}>
-          <FirebaseFileUploader acceptTypes="image/*" multiple={true} />
+        <Grid
+          sx={{
+            border: "none",
+            "@media (max-width: 600px)": {
+              width: "calc(100vw - 150px)",
+            },
+          }}
+        >
+          <FirebaseFileUploader acceptTypes="image/*" multiple={false} />
         </Grid>
       </Grid>
     </Box>
