@@ -15,7 +15,7 @@ import {
   type QuerySnapshot,
   doc
 } from 'firebase/firestore'
-import { ref, uploadString } from 'firebase/storage'
+import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { storage } from '../services/firebase'
 
 interface DataDocument<T> {
@@ -24,6 +24,17 @@ interface DataDocument<T> {
 }
 
 type QueryFilter = [string, any, any]
+
+export const createDocument = async <T>(collectionName: string, data: T) => {
+  const db = getFirestore()
+  const docRef: DocumentReference = doc(db, collectionName)
+  try {
+    await setDoc(docRef, data as Record<string, any>)
+  } catch (error) {
+    console.error('Error creating document:', error)
+    throw error
+  }
+}
 
 export const createOrUpdateDocument = async <T>(collectionName: string, docId: string, data: T) => {
   const db = getFirestore()
@@ -89,9 +100,9 @@ export const deleteDocument = async (collectionName: string, docId: string) => {
 
 export const uploadFile = async (file: string, path: string) => {
   const storageRef = ref(storage, path)
-  void uploadString(storageRef, file, 'data_url').then((snapshot) => {
-    console.log(snapshot)
-  })
+  await uploadString(storageRef, file, 'data_url')
+  const url = await getDownloadURL(storageRef)
+  return url.toString()
 }
 
 export const getDocument = async (collectionName: string, docId: string) => {

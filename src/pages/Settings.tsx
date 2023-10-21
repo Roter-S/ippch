@@ -1,11 +1,11 @@
-import { Typography, TextField, Divider } from '@mui/material'
+import { Typography, TextField, Divider, Alert } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import Grid from '@mui/material/Unstable_Grid2'
 import FirebaseFileUploader from '../components/common/inputs/FirebaseFileUploader'
 import { useState } from 'react'
-import { Formik, Form, ErrorMessage, Field } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { uploadFile } from '../utils/firestoreUtils'
+import { createDocument, createOrUpdateDocument, listDocuments, uploadFile } from '../utils/firestoreUtils'
 import MainCard from '../components/common/cards/MainCard'
 
 const Settings = () => {
@@ -16,12 +16,27 @@ const Settings = () => {
   }
 
   const handleFormSubmit = async (
-    values: { uploadedImages: any },
+    values: { uploadedImages: any, name: string },
     { setSubmitting, resetForm }: any
   ) => {
     try {
-      await uploadFile(values.uploadedImages[0], 'settings/logo.png')
+      const url = await uploadFile(values.uploadedImages[0], 'settings/logo.png')
+      const setting = await listDocuments('settings')
+      if (setting.length === 0) {
+        const data = {
+          logo: url,
+          name: values.name
+        }
+        await createDocument('settings', data)
+        console.log('Se creo el documento')
+      } else {
+        await createOrUpdateDocument('settings', setting[0].id, {
+          logo: url,
+          name: values.name
+        })
+      }
       resetForm()
+      window.location.reload()
     } catch (error) {
       console.log(error)
     } finally {
@@ -30,7 +45,8 @@ const Settings = () => {
   }
 
   const validationSchema = Yup.object().shape({
-    uploadedImages: Yup.array().min(1, 'Sube al menos una imagen')
+    uploadedImages: Yup.array().min(1, 'Sube al menos una imagen'),
+    name: Yup.string().required('El nombre es requerido')
   })
 
   return (
@@ -54,7 +70,7 @@ const Settings = () => {
           <Formik
             initialValues={{
               uploadedImages,
-              name: 'ValorInicial'
+              name: ''
             }}
             validationSchema={validationSchema}
             onSubmit={handleFormSubmit}
@@ -70,17 +86,15 @@ const Settings = () => {
                   }}
                 />
 
-                <ErrorMessage
-                  name="uploadedImages"
-                  component="div"
-                  className="error"
-                />
+                {typeof errors.uploadedImages === 'string'
+                  ? <Alert severity="error">{errors?.uploadedImages}</Alert>
+                  : null}
 
                 <Typography variant="h6" marginBottom={3}>
                   Titulo
                 </Typography>
                 <Field
-                  label="Nombre App"
+                  label="Nombre de la aplicación"
                   type="text"
                   as={TextField}
                   variant="outlined"
