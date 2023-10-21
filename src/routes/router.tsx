@@ -1,44 +1,44 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom'
 
-import RootLayout from "../components/layouts/RootLayout";
-import PrivateLayout from "../components/layouts/PrivateLayout";
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import Dashboard from "../pages/dashboard/Dashboard";
-import User from "../pages/Users";
-import Settings from "../pages/Settings";
+import RootLayout from '../components/layouts/RootLayout'
+import PrivateLayout from '../components/layouts/PrivateLayout'
+import Login from '../pages/auth/Login'
+import Register from '../pages/auth/Register'
+import Dashboard from '../pages/dashboard'
+import User from '../pages/Users'
+import Settings from '../pages/Settings'
 
 export const router = createBrowserRouter([
   {
-    path: "/admin",
+    path: '/admin',
     element: <RootLayout />,
     children: [
       {
         index: true,
-        element: <Login />,
+        element: <Login />
       },
       {
-        path: "register",
-        element: <Register />,
+        path: 'register',
+        element: <Register />
       },
       {
         element: <PrivateLayout />,
         children: [
           {
             index: true,
-            path: "dashboard",
-            element: <Dashboard />,
+            path: 'dashboard',
+            element: <Dashboard />
           },
           {
-            path: "users",
-            element: <User />,
+            path: 'users',
+            element: <User />
           },
           {
-            path: "settings",
-            element: <Settings />,
-          },
-        ],
-      },
-    ],
-  },
-]);
+            path: 'settings',
+            element: <Settings />
+          }
+        ]
+      }
+    ]
+  }
+])

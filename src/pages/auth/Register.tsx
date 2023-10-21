@@ -1,9 +1,9 @@
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
-import { register } from "../../services/firebase";
-import { useUserContext } from "../../context/UserContext";
-import { useRedirectActiveUser } from "../../hooks/useRedirectActiveUser";
-import { Link } from "react-router-dom";
+import { Formik, Form, Field } from 'formik'
+import * as Yup from 'yup'
+import { register } from '../../services/firebase'
+import { useUserContext } from '../../context/UserContext'
+import { useRedirectActiveUser } from '../../hooks/useRedirectActiveUser'
+import { Link } from 'react-router-dom'
 
 import {
   Avatar,
@@ -11,71 +11,73 @@ import {
   Button,
   Card,
   CardContent,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { LoadingButton } from "@mui/lab";
-import SignInWithGoogle from "../../components/common/SignInWithGoogle";
+  CardHeader,
+  TextField
+} from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { LoadingButton } from '@mui/lab'
+import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
 
 const Register = () => {
-  const { user } = useUserContext();
+  const { user } = useUserContext()
 
   // alternativa con hook
-  useRedirectActiveUser(user, "/admin");
+  useRedirectActiveUser(user, '/admin')
 
   const onSubmit = async (
-    { email, password }: { email: string; password: string },
+    { email, password }: { email: string, password: string },
     { setSubmitting, setErrors, resetForm }: any
   ) => {
     try {
-      await register({ email, password });
-      resetForm();
+      await register({ email, password })
+      resetForm()
     } catch (error: any) {
-      const authError = error as { code: string };
-      if (authError.code === "auth/email-already-in-use") {
-        setErrors({ email: "Correo electrónico ya en uso" });
+      const authError = error as { code: string }
+      if (authError.code === 'auth/email-already-in-use') {
+        setErrors({ email: 'Correo electrónico ya en uso' })
       }
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email("Email no válido").required("Email obligatorio"),
+    email: Yup.string().email('Email no válido').required('Email obligatorio'),
     password: Yup.string()
       .trim()
-      .min(6, "Mínimo 6 carácteres")
-      .required("Password obligatorio"),
-  });
+      .min(6, 'Mínimo 6 carácteres')
+      .required('Password obligatorio')
+  })
 
   return (
     <Box
       sx={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
+        width: '100%',
+        height: '100vh',
+        display: 'flex'
       }}
     >
       <Box
         sx={{
           maxWidth: 400,
-          textAlign: "center",
-          my: "auto",
-          mx: "auto",
+          textAlign: 'center',
+          my: 'auto',
+          mx: 'auto'
         }}
       >
         <Card>
+          <CardHeader
+            avatar={
+              <Avatar sx={{ mx: 'auto', bgcolor: 'secondary.main' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+            }
+            title="Registrarse"
+          />
           <CardContent>
-            <Avatar sx={{ mx: "auto", bgcolor: "primary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography sx={{ mt: 3, mb: 2 }} component="h1" variant="h5">
-              Registrarse
-            </Typography>
             <Formik
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: '', password: '' }}
               onSubmit={onSubmit}
               validationSchema={validationSchema}
             >
@@ -85,10 +87,10 @@ const Register = () => {
                     as={TextField}
                     sx={{ mb: 3 }}
                     fullWidth
-                    label="Email Address"
+                    label="Correo Electrónico"
                     id="email"
                     type="text"
-                    placeholder="Ingrese email"
+                    placeholder="Ingrese correo electrónico"
                     name="email"
                     error={Boolean(errors.email)}
                     helperText={errors.email}
@@ -97,7 +99,7 @@ const Register = () => {
                   <Field
                     as={TextField}
                     fullWidth
-                    label="Password"
+                    label="Contraseña"
                     id="password"
                     type="password"
                     placeholder="Ingrese contraseña"
@@ -132,7 +134,7 @@ const Register = () => {
         <SignInWithGoogle />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

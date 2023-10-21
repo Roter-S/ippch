@@ -10,11 +10,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface FirebaseFileUploaderProps {
   acceptTypes: string;
   multiple: boolean;
+  onImagesUploaded: (imageUrls: string[]) => void;
 }
 
 const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
   acceptTypes,
   multiple,
+  onImagesUploaded,
 }) => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [dragging, setDragging] = useState(false);
@@ -58,7 +60,8 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
           newImageUrls.push(reader.result as string);
 
           if (newImageUrls.length === files.length) {
-            setImageUrls([...imageUrls, ...newImageUrls]);
+            setImageUrls(newImageUrls);
+            onImagesUploaded(newImageUrls);
           }
         };
 
@@ -101,30 +104,30 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
             style={{ display: "none" }}
           />
         </div>
+        <ImageList sx={{ width: 500, height: "auto" }}>
+          {imageUrls.map((imageUrl, index) => (
+            <ImageListItem key={index}>
+              <img
+                srcSet={imageUrl}
+                src={imageUrl}
+                alt={imageUrl}
+                loading="lazy"
+              />
+              <ImageListItemBar
+                actionIcon={
+                  <IconButton
+                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                    aria-label={"delete"}
+                    onClick={() => handleDeleteImage(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
       </label>
-      <ImageList sx={{ width: 500, height: 450 }}>
-        {imageUrls.map((imageUrl, index) => (
-          <ImageListItem key={index}>
-            <img
-              srcSet={imageUrl}
-              src={imageUrl}
-              alt={imageUrl}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              actionIcon={
-                <IconButton
-                  sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                  aria-label={"delete"}
-                  onClick={() => handleDeleteImage(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              }
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   AppBar,
   Box,
@@ -8,47 +8,47 @@ import {
   Menu,
   Container,
   Avatar,
-  MenuItem,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { logOut } from "../../services/firebase";
-import { useUserContext } from "../../context/UserContext";
+  MenuItem
+} from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import { auth, logOut } from '../../services/firebase'
+import { useUserContext } from '../../context/UserContext'
 
-type NavbarProps = {
-  drawerWidth: number;
-  handleDrawerToggle: () => void;
-};
+interface NavbarProps {
+  drawerWidth: number
+  handleDrawerToggle: () => void
+}
 
 const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
-  );
+  )
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+    setAnchorElUser(event.currentTarget)
+  }
 
   const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+    setAnchorElUser(null)
+  }
 
   const handleLogout = async () => {
     try {
-      await logOut();
+      await logOut()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
-  const { user } = useUserContext();
+  const user = auth.currentUser
 
   return (
     <AppBar
       position="fixed"
       sx={{
         width: { sm: `calc(98.1% - ${drawerWidth}px)` },
-        mr: { sm: "18.5px" },
-        mt: "10px",
+        mr: { sm: '18.5px' },
+        mt: '10px'
       }}
     >
       <Container maxWidth="xl">
@@ -58,33 +58,35 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
             <Typography variant="h6" noWrap component="div"></Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {user && user.photoURL ? (
+              {user && user.photoURL
+                ? (
                 <Avatar alt="photoURL" src={user.photoURL} />
-              ) : (
+                  )
+                : (
                 <Avatar alt="photoURL" src="" />
-              )}
+                  )}
             </IconButton>
 
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: '45px' }}
               anchorEl={anchorElUser}
               keepMounted
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right'
               }}
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right'
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
@@ -102,7 +104,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
         </Toolbar>
       </Container>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

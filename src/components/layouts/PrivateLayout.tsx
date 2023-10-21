@@ -1,32 +1,33 @@
-import * as React from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { useUserContext } from "../../context/UserContext";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Navbar from "../common/Navbar";
-import MuiDrawer from "../common/drawer/MUIDrawer";
+import * as React from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useUserContext } from '../../context/UserContext'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import Navbar from '../common/Navbar'
+import MuiDrawer from '../common/drawer/MUIDrawer'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 interface Props {
-  window?: () => Window;
+  window?: () => Window
 }
 
 const Private: React.FC<Props> = (props) => {
-  const { user } = useUserContext();
+  const { user } = useUserContext()
 
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { window } = props
+  const [mobileOpen, setMobileOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    window !== undefined ? () => window().document.body : undefined
 
-  return user ? (
-    <Box sx={{ display: "flex", px: "18px", py: "25px" }}>
+  return user
+    ? (
+    <Box sx={{ display: 'flex', px: '18px', py: '25px' }}>
       <Navbar
         drawerWidth={drawerWidth}
         handleDrawerToggle={handleDrawerToggle}
@@ -47,16 +48,17 @@ const Private: React.FC<Props> = (props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${drawerWidth}px)` }
         }}
       >
         <Toolbar />
         <Outlet />
       </Box>
     </Box>
-  ) : (
+      )
+    : (
     <Navigate to="/" />
-  );
-};
+      )
+}
 
-export default Private;
+export default Private

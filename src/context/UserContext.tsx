@@ -3,70 +3,70 @@ import {
   useState,
   createContext,
   useContext,
-  ReactNode,
-} from "react";
-import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
-import { auth } from "../services/firebase";
-import Loader from "../components/common/Loader";
+  type ReactNode
+} from 'react'
+import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth'
+import { auth } from '../services/firebase'
+import Loader from '../components/common/Loader'
 
 interface User {
-  uid: string;
-  email: string | null;
-  photoURL: string | null;
+  uid: string
+  email: string | null
+  photoURL: string | null
 }
 
 interface UserContextType {
-  user: User | false;
+  user: User | false
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined)
 
 interface UserContextProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
-export default function UserContextProvider({
-  children,
+export default function UserContextProvider ({
+  children
 }: UserContextProviderProps) {
-  const [user, setUser] = useState<User | false | null>(null);
+  const [user, setUser] = useState<User | false | null>(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
       auth,
       (firebaseUser: FirebaseUser | null) => {
-        setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : false);
+        setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : false)
       }
-    );
+    )
 
     return () => {
-      unsubscribe();
-    };
-  }, []);
+      unsubscribe()
+    }
+  }, [])
 
-  if (user === null) return <Loader />;
+  if (user === null) return <Loader />
 
   const contextValue: UserContextType = {
-    user: user as User | false,
-  };
+    user: user as User | false
+  }
 
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
-  );
+  )
 }
 
 export const useUserContext = (): UserContextType => {
-  const context = useContext(UserContext);
+  const context = useContext(UserContext)
   if (context === undefined) {
-    throw new Error("useUserContext must be used within a UserContextProvider");
+    throw new Error('useUserContext must be used within a UserContextProvider')
   }
-  return context;
-};
+  return context
+}
 
 // Helper function to map Firebase user to your user type
-function mapFirebaseUser(firebaseUser: FirebaseUser): User {
+function mapFirebaseUser (firebaseUser: FirebaseUser): User {
   return {
     uid: firebaseUser.uid,
     email: firebaseUser.email,
-    photoURL: firebaseUser.photoURL,
-  };
+    photoURL: firebaseUser.photoURL
+  }
 }

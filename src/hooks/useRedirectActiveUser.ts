@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export const useRedirectActiveUser = (user: any, path: string): void => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
-      navigate(path);
+      navigate(path)
     }
-  }, [user, navigate, path]);
-};
+  }, [user, navigate, path])
+}
