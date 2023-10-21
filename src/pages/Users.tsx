@@ -1,4 +1,4 @@
-import { DataGrid, type GridColDef, GridToolbar } from '@mui/x-data-grid'
+import { DataGrid, type GridColDef, GridToolbar, type GridRowId } from '@mui/x-data-grid'
 import { Avatar, Divider, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { listDocuments, createOrUpdateDocument } from '../utils/firestoreUtils'
@@ -37,13 +37,8 @@ const Users = () => {
     void fetchUsers()
   }, [])
 
-  const deleteUser = async (id: string) => {
-    try {
-      const newUsers = users.filter((user) => user.id !== id)
-      setUsers(newUsers)
-    } catch (error) {
-      console.error('Error fetching users:', error)
-    }
+  const handleDeleteClick = (id: GridRowId) => () => {
+    setUsers(users.filter((user) => user.id !== id))
   }
 
   const columns: GridColDef[] = [
@@ -82,14 +77,20 @@ const Users = () => {
     },
     {
       field: 'actions',
+      type: 'actions',
       headerName: 'Acciones',
-      renderCell: (params) => (
-        <AlertDelete
-          id={String(params.id)}
-          collectionName={String('users')}
-          onUpdate={async () => { await deleteUser(String(params.id)) }}
-        />
-      )
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        return [
+          <AlertDelete
+            key={id}
+            id={String(id)}
+            collectionName={String('users')}
+            onUpdate={handleDeleteClick(String(id))}
+          />
+        ]
+      }
     }
   ]
 
