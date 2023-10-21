@@ -31,7 +31,7 @@ const SignInWithGoogle = () => {
       }}
       variant="contained"
       startIcon={<GoogleIcon />}
-      onClick={() => handleSignInWithGoogle}
+      onClick={handleSignInWithGoogle as React.MouseEventHandler<HTMLButtonElement>}
     >
       Continuar con Google
     </Button>

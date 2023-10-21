@@ -24,7 +24,7 @@ const Login = () => {
   const { user } = useUserContext()
 
   useEffect(() => {
-    if (user != null) {
+    if (user !== false) {
       navigate('/admin/dashboard')
     }
   }, [user])

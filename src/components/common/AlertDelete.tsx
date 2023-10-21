@@ -13,12 +13,13 @@ import { LoadingButton } from '@mui/lab'
 interface Props {
   id: string
   collectionName: string
-  onUpdate: () => void
+  onUpdate: (uid: string) => void
 }
 
-export default function AlertDialog ({ id, collectionName, onUpdate }: Props) {
+export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
   const [open, setOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const uid = id
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -32,7 +33,7 @@ export default function AlertDialog ({ id, collectionName, onUpdate }: Props) {
     await deleteDocument(collectionName, id)
     setOpen(false)
     setIsSubmitting(false)
-    onUpdate()
+    onUpdate(uid)
   }
 
   return (
@@ -64,7 +65,7 @@ export default function AlertDialog ({ id, collectionName, onUpdate }: Props) {
           <LoadingButton
             color="error"
             sx={{ mt: 3, mb: 2 }}
-            onClick={handleDelete}
+            onClick={handleDelete as React.MouseEventHandler<HTMLButtonElement>}
             disabled={isSubmitting}
             loading={isSubmitting}
           >

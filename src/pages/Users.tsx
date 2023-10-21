@@ -37,10 +37,10 @@ const Users = () => {
     void fetchUsers()
   }, [])
 
-  const updateUserList = async () => {
+  const deleteUser = async (id: string) => {
     try {
-      const userDocuments = await listDocuments('users')
-      setUsers(userDocuments as UserDocuments[])
+      const newUsers = users.filter((user) => user.id !== id)
+      setUsers(newUsers)
     } catch (error) {
       console.error('Error fetching users:', error)
     }
@@ -87,7 +87,7 @@ const Users = () => {
         <AlertDelete
           id={String(params.id)}
           collectionName={String('users')}
-          onUpdate={() => updateUserList}
+          onUpdate={async () => { await deleteUser(String(params.id)) }}
         />
       )
     }
@@ -121,7 +121,8 @@ const Users = () => {
           border: 'none',
           '@media (max-width: 600px)': {
             width: 'calc(100vw - 95px)'
-          }
+          },
+          height: 650
         }}
         rows={usersWithNumeration}
         columns={columns}

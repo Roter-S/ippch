@@ -7,6 +7,7 @@ import Register from '../pages/auth/Register'
 import Dashboard from '../pages/dashboard'
 import User from '../pages/Users'
 import Settings from '../pages/Settings'
+import Ministries from '../pages/Ministries'
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
           {
             path: 'users',
             element: <User />
+          },
+          {
+            path: 'ministries',
+            element: <Ministries />
           },
           {
             path: 'settings',

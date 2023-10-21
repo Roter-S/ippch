@@ -14,6 +14,7 @@ import { listDocuments } from '../../../utils/firestoreUtils'
 import { useEffect, useState } from 'react'
 import { type Settings } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle'
 
 const RoutesDrawer = () => {
   const location = useLocation()
@@ -67,6 +68,11 @@ const RoutesDrawer = () => {
             title: 'Usuarios',
             icon: <GroupIcon />,
             to: '/admin/users'
+          },
+          {
+            title: 'Ministerios',
+            icon: <SupervisedUserCircleIcon />,
+            to: '/admin/ministries'
           },
           {
             title: 'Configuración',
