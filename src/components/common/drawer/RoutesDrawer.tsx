@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar'
 import { Stack, Typography } from '@mui/material'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GroupIcon from '@mui/icons-material/Group'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import SettingsIcon from '@mui/icons-material/Settings'
 import { NavLink, useLocation } from 'react-router-dom'
 import { listDocuments } from '../../../utils/firestoreUtils'
@@ -69,6 +70,11 @@ const RoutesDrawer = () => {
             title: 'Usuarios',
             icon: <GroupIcon />,
             to: '/admin/users'
+          },
+          {
+            title: 'Roles',
+            icon: <AdminPanelSettingsIcon />,
+            to: '/admin/roles'
           },
           {
             title: 'Ministerios',

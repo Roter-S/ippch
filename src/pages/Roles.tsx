@@ -32,7 +32,7 @@ interface EditToolbarProps {
   ) => void
 }
 
-interface CellDocuments {
+interface RoleDocuments {
   id: string
   name: string | null
   description: string
@@ -60,15 +60,15 @@ function EditToolbar (props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid () {
-  const [rows, setRows] = React.useState<CellDocuments[]>([])
+  const [rows, setRows] = React.useState<RoleDocuments[]>([])
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({})
 
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const cellDocuments = await listDocuments('cells')
-        const cellsData = cellDocuments.map((ministry) => ministry.data)
-        setRows(cellsData as CellDocuments[])
+        const roleDocuments = await listDocuments('roles')
+        const rolesData = roleDocuments.map((ministry) => ministry.data)
+        setRows(rolesData as RoleDocuments[])
       } catch (error) {
         console.error('Error fetching users:', error)
       }
@@ -108,7 +108,7 @@ export default function FullFeaturedCrudGrid () {
   }
 
   const processRowUpdate = async (newRow: GridRowModel) => {
-    const updatedRow: CellDocuments = {
+    const updatedRow: RoleDocuments = {
       id: newRow.id,
       name: newRow.name as string,
       description: newRow.description as string,
@@ -117,9 +117,9 @@ export default function FullFeaturedCrudGrid () {
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
     rows.map(async (row) => {
       if (row.id === newRow.id) {
-        await createOrUpdateDocument('cells', newRow.id, updatedRow)
+        await createOrUpdateDocument('roles', newRow.id, updatedRow)
       } else {
-        await createDocument('cells', {
+        await createDocument('roles', {
           name: newRow.name as string,
           description: newRow.description as string
         })
@@ -189,7 +189,7 @@ export default function FullFeaturedCrudGrid () {
           <AlertDelete
             key={id}
             id={String(id)}
-            collectionName={String('cells')}
+            collectionName={String('roles')}
             onUpdate={handleDeleteClick(String(id))}
           />
         ]
@@ -200,7 +200,7 @@ export default function FullFeaturedCrudGrid () {
   return (
     <MainCard>
         <Typography variant="h4" component="h2" gutterBottom>
-            Células
+            Roles
         </Typography>
         <Divider />
         <Grid container spacing={3}>

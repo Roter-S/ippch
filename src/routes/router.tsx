@@ -9,6 +9,7 @@ import User from '../pages/Users'
 import Settings from '../pages/Settings'
 import Ministries from '../pages/Ministries'
 import Cells from '../pages/Cells'
+import Roles from '../pages/Roles'
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
           {
             path: 'users',
             element: <User />
+          },
+          {
+            path: 'roles',
+            element: <Roles />
           },
           {
             path: 'ministries',
