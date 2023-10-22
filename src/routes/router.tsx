@@ -8,6 +8,7 @@ import Dashboard from '../pages/dashboard'
 import User from '../pages/Users'
 import Settings from '../pages/Settings'
 import Ministries from '../pages/Ministries'
+import Cells from '../pages/Cells'
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
           {
             path: 'ministries',
             element: <Ministries />
+          },
+          {
+            path: 'cells',
+            element: <Cells />
           },
           {
             path: 'settings',

@@ -32,7 +32,7 @@ interface EditToolbarProps {
   ) => void
 }
 
-interface MinistriesDocuments {
+interface CellDocuments {
   id: string
   name: string | null
   description: string
@@ -60,15 +60,15 @@ function EditToolbar (props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid () {
-  const [rows, setRows] = React.useState<MinistriesDocuments[]>([])
+  const [rows, setRows] = React.useState<CellDocuments[]>([])
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({})
 
   React.useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const ministriesDocuments = await listDocuments('ministries')
-        const ministriesData = ministriesDocuments.map((ministry) => ministry.data)
-        setRows(ministriesData as MinistriesDocuments[])
+        const cellsDocuments = await listDocuments('cells')
+        const cellsData = cellsDocuments.map((ministry) => ministry.data)
+        setRows(cellsData as CellDocuments[])
       } catch (error) {
         console.error('Error fetching users:', error)
       }
@@ -108,7 +108,7 @@ export default function FullFeaturedCrudGrid () {
   }
 
   const processRowUpdate = async (newRow: GridRowModel) => {
-    const updatedRow: MinistriesDocuments = {
+    const updatedRow: CellDocuments = {
       id: newRow.id,
       name: newRow.name as string,
       description: newRow.description as string,
@@ -117,9 +117,9 @@ export default function FullFeaturedCrudGrid () {
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
     rows.map(async (row) => {
       if (row.id === newRow.id) {
-        await createOrUpdateDocument('ministries', newRow.id, updatedRow)
+        await createOrUpdateDocument('cells', newRow.id, updatedRow)
       } else {
-        await createDocument('ministries', {
+        await createDocument('cells', {
           name: newRow.name as string,
           description: newRow.description as string
         })
@@ -189,7 +189,7 @@ export default function FullFeaturedCrudGrid () {
           <AlertDelete
             key={id}
             id={String(id)}
-            collectionName={String('ministries')}
+            collectionName={String('cells')}
             onUpdate={handleDeleteClick(String(id))}
           />
         ]
@@ -200,7 +200,7 @@ export default function FullFeaturedCrudGrid () {
   return (
     <MainCard>
         <Typography variant="h4" component="h2" gutterBottom>
-            Ministerios
+            Células
         </Typography>
         <Divider />
         <Grid container spacing={3}>

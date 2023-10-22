@@ -22,7 +22,6 @@ import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
 const Register = () => {
   const { user } = useUserContext()
 
-  // alternativa con hook
   useRedirectActiveUser(user, '/admin')
 
   const onSubmit = async (

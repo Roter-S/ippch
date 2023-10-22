@@ -45,7 +45,7 @@ export const createOrUpdateDocument = async <T>(collectionName: string, docId: s
     if (docSnapshot.exists()) {
       await updateDoc(docRef, data as Record<string, any>)
     } else {
-      const dataWithRole = { ...data, role: 'user' }
+      const dataWithRole = { ...data }
       await setDoc(docRef, dataWithRole as Record<string, any>)
     }
   } catch (error) {

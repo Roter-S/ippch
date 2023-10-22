@@ -43,7 +43,7 @@ const Users = () => {
 
   const columns: GridColDef[] = [
     { field: 'num', headerName: '#', width: 70, align: 'center' },
-    { field: 'displayName', headerName: 'Nombre', width: 300 },
+    { field: 'displayName', headerName: 'Nombre', width: 300, editable: true },
     { field: 'email', headerName: 'Correo electrónico', width: 300 },
     {
       field: 'role',

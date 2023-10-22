@@ -14,7 +14,8 @@ import { listDocuments } from '../../../utils/firestoreUtils'
 import { useEffect, useState } from 'react'
 import { type Settings } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle'
+import Diversity3Icon from '@mui/icons-material/Diversity3'
+import AccountTreeIcon from '@mui/icons-material/AccountTree'
 
 const RoutesDrawer = () => {
   const location = useLocation()
@@ -71,8 +72,13 @@ const RoutesDrawer = () => {
           },
           {
             title: 'Ministerios',
-            icon: <SupervisedUserCircleIcon />,
+            icon: <AccountTreeIcon />,
             to: '/admin/ministries'
+          },
+          {
+            title: 'Células',
+            icon: <Diversity3Icon />,
+            to: '/admin/cells'
           },
           {
             title: 'Configuración',
