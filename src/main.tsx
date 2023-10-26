@@ -11,9 +11,16 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import './assets/css/Main.css'
+import { getCollection } from './utils/firestoreUtils'
+import { type Setting } from './types/Types'
 
 const rootElement = document.getElementById('root')
 if (rootElement !== null) {
+  const setting: Setting[] = await getCollection('settings')
+  if (setting.length > 0) {
+    document.title = setting[0].name
+  }
+
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
