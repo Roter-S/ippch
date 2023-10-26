@@ -1,110 +1,112 @@
-import React, { useState, ChangeEvent, DragEvent } from "react";
+import React, { useState, type ChangeEvent, type DragEvent } from 'react'
 import {
   IconButton,
   ImageList,
   ImageListItem,
-  ImageListItemBar,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+  ImageListItemBar
+} from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface FirebaseFileUploaderProps {
-  acceptTypes: string;
-  multiple: boolean;
-  onImagesUploaded: (imageUrls: string[]) => void;
+  acceptTypes: string
+  multiple: boolean
+  onImagesUploaded: (imageUrls: string[]) => void
 }
 
 const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
   acceptTypes,
   multiple,
-  onImagesUploaded,
+  onImagesUploaded
 }) => {
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [dragging, setDragging] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [dragging, setDragging] = useState(false)
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    handleFiles(files);
-  };
+    const files = event.target.files
+    handleFiles(files)
+  }
 
   const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(true);
-  };
+    event.preventDefault()
+    setDragging(true)
+  }
 
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(false);
-  };
+    event.preventDefault()
+    setDragging(false)
+  }
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(false);
+    event.preventDefault()
+    setDragging(false)
 
-    const files = event.dataTransfer.files;
-    handleFiles(files);
-  };
+    const files = event.dataTransfer.files
+    handleFiles(files)
+  }
 
   const handleFiles = (files: FileList | null) => {
     if (files && files.length > 0) {
-      const newImageUrls: string[] = [];
+      const newImageUrls: string[] = []
 
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
+        const file = files[i]
+        const reader = new FileReader()
 
         reader.onloadend = () => {
-          newImageUrls.push(reader.result as string);
+          newImageUrls.push(reader.result as string)
 
           if (newImageUrls.length === files.length) {
-            setImageUrls(newImageUrls);
-            onImagesUploaded(newImageUrls);
+            setImageUrls(newImageUrls)
+            onImagesUploaded(newImageUrls)
           }
-        };
+        }
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file)
       }
     }
-  };
+  }
 
   const handleDeleteImage = (index: number) => {
-    const updatedImages = [...imageUrls];
-    updatedImages.splice(index, 1);
-    setImageUrls(updatedImages);
-  };
+    const updatedImages = [...imageUrls]
+    updatedImages.splice(index, 1)
+    setImageUrls(updatedImages)
+  }
 
   return (
     <>
-      <label htmlFor="upload-image" style={{ cursor: "pointer" }}>
+      <label htmlFor="upload-image" style={{ cursor: 'pointer' }}>
         <div
           id="upload-dropzone"
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className={`dropzone ${dragging ? "dragging" : ""}`}
+          className={`dropzone ${dragging ? 'dragging' : ''}`}
         >
-          {dragging ? (
+          {dragging
+            ? (
             <p>Suelta aquí los archivos</p>
-          ) : (
+              )
+            : (
             <p>
               Arrastra y suelta tus archivos aquí o haz clic para
               seleccionarlos.
             </p>
-          )}
+              )}
           <input
             id="upload-image"
             type="file"
             accept={acceptTypes}
             onChange={handleFileUpload}
             multiple={multiple}
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
           />
         </div>
-        <ImageList sx={{ width: 500, height: "auto" }}>
+        <ImageList sx={{ width: 500, height: 'auto' }}>
           {imageUrls.map((imageUrl, index) => (
             <ImageListItem key={index}>
               <img
@@ -116,9 +118,9 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
               <ImageListItemBar
                 actionIcon={
                   <IconButton
-                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={"delete"}
-                    onClick={() => handleDeleteImage(index)}
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                    aria-label={'delete'}
+                    onClick={() => { handleDeleteImage(index) }}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -129,7 +131,7 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
         </ImageList>
       </label>
     </>
-  );
-};
+  )
+}
 
-export default FirebaseFileUploader;
+export default FirebaseFileUploader
