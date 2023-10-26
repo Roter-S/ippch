@@ -36,14 +36,11 @@ const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
       <Card
         ref={ref}
         {...others}
-        component="div"
         sx={{
-          ':hover': {
-            boxShadow: boxShadow ?? '0 2px 14px 0 rgb(255 255 255 / 10%)'
-          }
+          ...sx,
+          border: 'none'
         }}
       >
-
         {content && (
           <CardContent sx={contentSX} className={contentClass}>
             {children}

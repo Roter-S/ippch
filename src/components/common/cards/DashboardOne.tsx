@@ -2,7 +2,7 @@ import SkeletonDO from '../skeleton/SkeletonDO'
 import { styled } from '@mui/material/styles'
 import MainCard from './MainCard'
 import { Box, Typography } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2'
+import Grid from '@mui/material/Grid'
 import Item from '../Grid/Item'
 import { type ReactNode } from 'react'
 
@@ -59,48 +59,45 @@ const DashboardOne = ({ isLoading, icon, value, title, backgroundColor, backgrou
     <CardWrapper>
       <Box>
         <Grid container direction="column">
-          <Grid>
-            <Item>
-              <Grid container alignItems="center">
-                <Grid>
-                  <Item
-                    sx={{
-                      backgroundColor: background,
-                      color: 'white',
-                      borderRadius: '10px'
-                    }}
-                  >
-                    {icon}
-                  </Item>
-                </Grid>
-                <Grid>
-                  <Item>
-                    <Typography
-                      sx={{
-                        fontSize: '2.125rem',
-                        fontWeight: 500,
-                        mr: 1,
-                        mt: 1.75,
-                        mb: 0.75
-                      }}
-                    >
-                      {value ?? '0'}
-                    </Typography>
-                  </Item>
-                </Grid>
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item
+                sx={{
+                  backgroundColor: background,
+                  color: 'white',
+                  borderRadius: '10px',
+                  paddingX: '4px',
+                  paddingBottom: '0px',
+                  marginRight: '2px'
+                }}
+              >
+                {icon}
               </Grid>
-              <Grid sx={{ mb: 1.25 }}>
+              <Grid item>
                 <Typography
                   sx={{
-                    fontSize: '1rem',
+                    fontSize: '2.125rem',
                     fontWeight: 500,
-                    color: 'white'
+                    mr: 1,
+                    mt: 1.75,
+                    mb: 0.75
                   }}
                 >
-                  {title ?? 'Descripción'}
+                  {value ?? '0'}
                 </Typography>
               </Grid>
-            </Item>
+            </Grid>
+            <Grid sx={{ mb: 1.25 }}>
+              <Typography
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  color: 'white'
+                }}
+              >
+                {title ?? 'Descripción'}
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

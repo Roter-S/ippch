@@ -22,7 +22,7 @@ const DashboardTwo = ({ isLoading, icon, value, title, backgroundColor, backgrou
     '&:after': {
       content: '""',
       position: 'absolute',
-      width: 210,
+      width: 310,
       height: 210,
       background: `linear-gradient(210.04deg, ${background} -50.94%, rgba(144, 202, 249, 0) 83.49%)`,
       borderRadius: '50%',
@@ -55,7 +55,7 @@ const DashboardTwo = ({ isLoading, icon, value, title, backgroundColor, backgrou
                 <ListItemText
                   sx={{
                     py: 0,
-                    mt: 0.45,
+                    mt: 1,
                     mb: 0.45
                   }}
                   primary={
@@ -64,7 +64,7 @@ const DashboardTwo = ({ isLoading, icon, value, title, backgroundColor, backgrou
                     </Typography>
                   }
                   secondary={
-                    <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
+                    <Typography variant="subtitle2" sx={{ color: 'primary.light' }}>
                       {title ?? 'Descripción'}
                     </Typography>
                   }
