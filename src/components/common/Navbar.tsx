@@ -8,21 +8,32 @@ import {
   Menu,
   Container,
   Avatar,
-  MenuItem
+  MenuItem,
+  Button,
+  Divider
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { auth, logOut } from '../../services/firebase'
-import { useUserContext } from '../../context/UserContext'
+import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications'
+import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import { useNavigate } from 'react-router-dom'
 
 interface NavbarProps {
   drawerWidth: number
   handleDrawerToggle: () => void
 }
 
+interface User {
+  displayName?: string | null
+  photoURL?: string | null
+}
+
 const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   )
+  const navigate = useNavigate()
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
@@ -30,6 +41,11 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const redirect = (path: string) => {
+    navigate(path)
+    handleCloseUserMenu()
   }
 
   const handleLogout = async () => {
@@ -40,7 +56,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
     }
   }
 
-  const user = auth.currentUser
+  const user = auth.currentUser as User
 
   return (
     <AppBar
@@ -66,15 +82,29 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
             <Typography variant="h6" noWrap component="div"></Typography>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {user && user.photoURL
+            <Button onClick={handleOpenUserMenu}
+            sx={{
+              paddingX: 1,
+              paddingY: 0.5,
+              '&:hover': {
+                borderRadius: '8px'
+              },
+              '&:active': {
+                borderRadius: '8px'
+              }
+            }}>
+              { (user.displayName != null) && (user.photoURL != null)
                 ? (
-                <Avatar alt="photoURL" src={user.photoURL} />
+                  <>
+                    <Typography sx={{ marginRight: '4px' }}>{user.displayName}</Typography>
+                    <Avatar alt="photoURL" src={user.photoURL} />
+                  </>
                   )
                 : (
-                <Avatar alt="photoURL" src="" />
-                  )}
-            </IconButton>
+                    <Typography sx={{ marginRight: '4px' }}>Usuario</Typography>
+                  )
+              }
+            </Button>
 
             <Menu
               sx={{ mt: '45px' }}
@@ -91,12 +121,19 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {user && user.email && (
-                <MenuItem>
-                  <Typography textAlign="center">{user.email}</Typography>
-                </MenuItem>
-              )}
+              <MenuItem>
+                <AccountBoxIcon />
+                <Typography textAlign="center">Perfil</Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem
+                onClick={() => { redirect('/admin/settings') } }
+              >
+                <SettingsApplicationsIcon />
+                <Typography textAlign="center">Configuración</Typography>
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
+                <ExitToAppIcon />
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
             </Menu>

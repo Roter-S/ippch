@@ -1,11 +1,8 @@
 import {
-  getFirestore,
-  type Firestore,
   collection,
   getDocs,
   getDoc,
   type DocumentReference,
-  setDoc,
   updateDoc,
   deleteDoc,
   type QueryDocumentSnapshot,
@@ -13,23 +10,17 @@ import {
   where,
   type Query,
   type QuerySnapshot,
-  doc
+  doc,
+  addDoc
 } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
-import { storage } from '../services/firebase'
-
-interface DataDocument<T> {
-  id: string
-  data: T
-}
+import { storage, db } from '../services/firebase'
 
 type QueryFilter = [string, any, any]
 
 export const createDocument = async <T>(collectionName: string, data: T) => {
-  const db = getFirestore()
-  const docRef: DocumentReference = doc(db, collectionName)
   try {
-    await setDoc(docRef, data as Record<string, any>)
+    await addDoc(collection(db, collectionName), data as Record<string, any>)
   } catch (error) {
     console.error('Error creating document:', error)
     throw error
@@ -37,7 +28,6 @@ export const createDocument = async <T>(collectionName: string, data: T) => {
 }
 
 export const createOrUpdateDocument = async <T>(collectionName: string, docId: string, data: T) => {
-  const db = getFirestore()
   const docRef: DocumentReference = doc(db, collectionName, docId)
 
   try {
@@ -45,8 +35,7 @@ export const createOrUpdateDocument = async <T>(collectionName: string, docId: s
     if (docSnapshot.exists()) {
       await updateDoc(docRef, data as Record<string, any>)
     } else {
-      const dataWithRole = { ...data }
-      await setDoc(docRef, dataWithRole as Record<string, any>)
+      await createDocument(collectionName, data as Record<string, any>)
     }
   } catch (error) {
     console.error('Error creating/updating document:', error)
@@ -54,8 +43,7 @@ export const createOrUpdateDocument = async <T>(collectionName: string, docId: s
   }
 }
 
-export const listDocuments = async <T>(collectionName: string, filters: QueryFilter[] = []): Promise<Array<DataDocument<T>>> => {
-  const db: Firestore = getFirestore()
+export const getCollection = async (collectionName: string, filters: QueryFilter[] = []) => {
   const collectionRef = collection(db, collectionName)
   let queryRef: Query = collectionRef
 
@@ -65,13 +53,10 @@ export const listDocuments = async <T>(collectionName: string, filters: QueryFil
 
   try {
     const querySnapshot: QuerySnapshot = await getDocs(queryRef)
-    const documents: Array<DataDocument<T>> = []
+    const documents: T[] = []
 
     querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
-      documents.push({
-        id: doc.id,
-        data: doc.data() as T
-      })
+      documents.push({ id: doc.id, ...doc.data() })
     })
 
     return documents
@@ -82,7 +67,6 @@ export const listDocuments = async <T>(collectionName: string, filters: QueryFil
 }
 
 export const deleteDocument = async (collectionName: string, docId: string) => {
-  const db: Firestore = getFirestore()
   const docRef: DocumentReference = doc(db, collectionName, docId)
   try {
     const docSnapshot = await getDoc(docRef)
@@ -106,7 +90,6 @@ export const uploadFile = async (file: string, path: string) => {
 }
 
 export const getDocument = async (collectionName: string, docId: string) => {
-  const db: Firestore = getFirestore()
   const docRef = doc(db, collectionName, docId)
   const docSnap = await getDoc(docRef)
 

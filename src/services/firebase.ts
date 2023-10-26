@@ -9,6 +9,7 @@ import {
 } from 'firebase/auth'
 import { createOrUpdateDocument } from '../utils/firestoreUtils'
 import { getStorage } from 'firebase/storage'
+import { getFirestore } from 'firebase/firestore'
 
 interface FirebaseConfig {
   apiKey: string
@@ -38,14 +39,27 @@ export const login = async ({ email, password }: { email: string, password: stri
   await signInWithEmailAndPassword(auth, email, password)
 
 export const register = async ({ email, password }: { email: string, password: string }): Promise<UserCredential> => {
-  const auth = getAuth()
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-  await createOrUpdateDocument('users', userCredential.user.uid, userCredential.user)
-  return userCredential
+  try {
+    const auth = getAuth()
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const user = {
+      uid: userCredential.user.uid,
+      email: userCredential.user.email,
+      displayName: userCredential.user.displayName,
+      photoURL: userCredential.user.photoURL,
+      roles: {}
+    }
+    await createOrUpdateDocument('users', user.uid, user)
+    return userCredential
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export const logOut = async (): Promise<void> => { await signOut(auth) }
 
 export { auth }
+
+export const db = getFirestore(app);
 
 export const storage = getStorage(app)

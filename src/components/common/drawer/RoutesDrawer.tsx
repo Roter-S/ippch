@@ -8,31 +8,28 @@ import Avatar from '@mui/material/Avatar'
 import { Stack, Typography } from '@mui/material'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GroupIcon from '@mui/icons-material/Group'
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import SettingsIcon from '@mui/icons-material/Settings'
 import { NavLink, useLocation } from 'react-router-dom'
-import { listDocuments } from '../../../utils/firestoreUtils'
+import { getCollection } from '../../../utils/firestoreUtils'
 import { useEffect, useState } from 'react'
-import { type Settings } from '../../../types/Types'
+import { type Setting } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
-import Diversity3Icon from '@mui/icons-material/Diversity3'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
 
 const RoutesDrawer = () => {
   const location = useLocation()
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [settings, setSettings] = useState<Settings[]>([])
+  const [settings, setSettings] = useState<Setting[]>([])
+
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const settingDocuments = await listDocuments('settings')
-        setSettings(settingDocuments as Settings[])
+        const settingDocuments = await getCollection('settings')
+        setSettings(settingDocuments as Setting[])
         setIsLoading(false)
       } catch (error) {
         console.error('Error fetching settings:', error)
       }
     }
-
     void fetchSettings()
   }, [])
 
@@ -46,12 +43,12 @@ const RoutesDrawer = () => {
               <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
                 <Avatar
                   alt="log"
-                  src={settings.length > 0 ? settings[0].data.image : ''}
+                  src={settings.length > 0 ? settings[0].image : ''}
                 />
                 <ListItemText sx={{ py: 0, mt: 0.45, mb: 0.45, ml: 1 }}
                           primary={
                             <Typography variant="h6" sx={{ color: '#fff' }}>
-                              {settings.length > 0 ? settings[0].data.name : ''}
+                              {settings.length > 0 ? settings[0].name : ''}
                             </Typography>
                           }
                         />
@@ -72,24 +69,9 @@ const RoutesDrawer = () => {
             to: '/admin/users'
           },
           {
-            title: 'Roles',
-            icon: <AdminPanelSettingsIcon />,
-            to: '/admin/roles'
-          },
-          {
             title: 'Ministerios',
             icon: <AccountTreeIcon />,
             to: '/admin/ministries'
-          },
-          {
-            title: 'Células',
-            icon: <Diversity3Icon />,
-            to: '/admin/cells'
-          },
-          {
-            title: 'Configuración',
-            icon: <SettingsIcon />,
-            to: '/admin/settings'
           }
         ].map((text, index) => (
           <ListItem

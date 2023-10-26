@@ -1,14 +1,15 @@
 import { Typography, TextField, Divider, Alert } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import Grid from '@mui/material/Unstable_Grid2'
+import Grid from '@mui/material/Grid'
 import FirebaseFileUploader from '../components/common/inputs/FirebaseFileUploader'
 import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { createDocument, createOrUpdateDocument, listDocuments, uploadFile } from '../utils/firestoreUtils'
+import { createDocument, createOrUpdateDocument, getCollection, uploadFile } from '../utils/firestoreUtils'
 import MainCard from '../components/common/cards/MainCard'
+import { type Setting } from '../types/Types'
 
-const Settings = () => {
+export const Settings = () => {
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
   const handleImagesUploaded = (imageUrls: string[]) => {
@@ -21,8 +22,8 @@ const Settings = () => {
   ) => {
     try {
       const url = await uploadFile(values.uploadedImages[0], 'settings/logo.png')
-      const setting = await listDocuments('settings')
-      if (setting.length === 0) {
+      const setting: Setting[] = await getCollection('settings')
+      if (Array.isArray(setting) && setting.length === 0) {
         const data = {
           logo: url,
           name: values.name
@@ -57,12 +58,14 @@ const Settings = () => {
       <Divider />
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid
+          marginTop={2}
           sx={{
             border: 'none',
             '@media (max-width: 600px)': {
               width: 'calc(100vw - 150px)'
             }
           }}
+          item
         >
           <Typography variant="h6" marginBottom={3}>
             Logo
@@ -120,5 +123,3 @@ const Settings = () => {
     </MainCard>
   )
 }
-
-export default Settings
