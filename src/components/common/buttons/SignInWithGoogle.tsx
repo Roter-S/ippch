@@ -13,10 +13,13 @@ const SignInWithGoogle = () => {
       const user = result.user
       const userFirestore = await getDocument('users', user.uid)
       await createOrUpdateDocument('users', user.uid, {
+        uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
-        role: (userFirestore?.uid != null) ? userFirestore.data.role : 'user'
+        leader: (userFirestore?.uid != null) ? userFirestore.leader : [],
+        assistant: (userFirestore?.uid != null) ? userFirestore.assistant : [],
+        member: (userFirestore?.uid != null) ? userFirestore.member : []
       })
     } catch (error) {
       console.log(error)
@@ -26,8 +29,6 @@ const SignInWithGoogle = () => {
   return (
     <Button
       sx={{
-        mt: 3,
-        mb: 2,
         bgcolor: 'secondary.main',
         ':hover': { bgcolor: 'secondary.dark' }
       }}
