@@ -1,9 +1,9 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { register } from '../../services/firebase'
+import { useEffect } from 'react'
+import { login } from '../../services/firebase'
+import { Link, useNavigate } from 'react-router-dom'
 import { useUserContext } from '../../context/UserContext'
-import { useRedirectActiveUser } from '../../hooks/useRedirectActiveUser'
-import { Link } from 'react-router-dom'
 
 import {
   Avatar,
@@ -19,22 +19,33 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { LoadingButton } from '@mui/lab'
 import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
 
-export const Register = () => {
+export const Login = () => {
+  const navigate = useNavigate()
   const { user } = useUserContext()
 
-  useRedirectActiveUser(user, '/admin/dashboard')
+  useEffect(() => {
+    if (user !== false) {
+      navigate('/admin/dashboard')
+    }
+  }, [user])
 
   const onSubmit = async (
     { email, password }: { email: string, password: string },
     { setSubmitting, setErrors, resetForm }: any
   ) => {
     try {
-      await register({ email, password })
+      await login({ email, password })
       resetForm()
     } catch (error: any) {
-      const authError = error as { code: string }
-      if (authError.code === 'auth/email-already-in-use') {
-        setErrors({ email: 'Correo electrónico ya en uso' })
+      if (typeof error.code === 'string') {
+        const authErrorCode = error.code
+        if (authErrorCode === 'auth/user-not-found') {
+          setErrors({ email: 'Email no registrado' })
+        } else if (authErrorCode === 'auth/wrong-password') {
+          setErrors({ password: 'Contraseña incorrecta' })
+        } else if (authErrorCode === 'auth/invalid-login-credentials') {
+          setErrors({ email: 'Credenciales Invalidas' })
+        }
       }
     } finally {
       setSubmitting(false)
@@ -42,11 +53,11 @@ export const Register = () => {
   }
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Email no válido').required('Email obligatorio'),
+    email: Yup.string().email('Email no válido').required('Email requerido'),
     password: Yup.string()
       .trim()
-      .min(6, 'Mínimo 6 carácteres')
-      .required('Password obligatorio')
+      .min(6, 'Mínimo 6 caracteres')
+      .required('Contraseña requerida')
   })
 
   return (
@@ -68,11 +79,11 @@ export const Register = () => {
         <Card>
           <CardHeader
             avatar={
-              <Avatar sx={{ mx: 'auto', bgcolor: 'secondary.main' }}>
+              <Avatar sx={{ mx: 'auto', bgcolor: 'primary.main' }}>
                 <LockOutlinedIcon />
               </Avatar>
             }
-            title="Registrarse"
+            title="Inicio de Sesión"
           />
           <CardContent>
             <Formik
@@ -84,15 +95,15 @@ export const Register = () => {
                 <Form>
                   <Field
                     as={TextField}
-                    sx={{ mb: 3 }}
                     fullWidth
+                    sx={{ mb: 3 }}
                     label="Correo Electrónico"
                     id="email"
                     type="text"
                     placeholder="Ingrese correo electrónico"
                     name="email"
-                    error={Boolean(errors.email)}
-                    helperText={errors.email}
+                    error={Boolean(errors?.email)}
+                    helperText={errors?.email}
                   />
 
                   <Field
@@ -103,25 +114,27 @@ export const Register = () => {
                     type="password"
                     placeholder="Ingrese contraseña"
                     name="password"
-                    error={Boolean(errors.password)}
-                    helperText={errors.password}
+                    error={Boolean(errors?.password)}
+                    helperText={errors?.password}
                   />
-
                   <LoadingButton
                     variant="contained"
-                    color="primary"
                     sx={{ mt: 3, mb: 2 }}
                     fullWidth
                     type="submit"
                     disabled={isSubmitting}
                     loading={isSubmitting}
                   >
-                    Register
+                    Iniciar Sesión
                   </LoadingButton>
                   <Grid container>
                     <Grid xs={12}>
-                      <Button component={Link} to="/admin" color="primary">
-                        ¿Ya tienes cuenta? Accede aquí
+                      <Button
+                        color="primary"
+                        component={Link}
+                        to="/admin/register"
+                      >
+                        ¿No tienes cuenta? Registrate
                       </Button>
                     </Grid>
                   </Grid>
