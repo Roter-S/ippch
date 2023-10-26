@@ -9,6 +9,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import WarningIcon from '@mui/icons-material/Warning'
 import { deleteDocument } from '../../utils/firestoreUtils'
 import { LoadingButton } from '@mui/lab'
+import { IconButton } from '@mui/material'
 
 interface Props {
   id: string
@@ -20,10 +21,6 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
   const [open, setOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const uid = id
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
 
   const handleClose = () => {
     setOpen(false)
@@ -38,12 +35,15 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
 
   return (
     <div>
-      <Button
-        color="error"
-        variant="contained"
-        startIcon={<DeleteIcon />}
-        onClick={handleClickOpen}
-      ></Button>
+      <IconButton
+        onClick={() => { setOpen(true) }}
+        sx={{
+          m: 0,
+          p: 0.5
+        }}
+      >
+        <DeleteIcon color='error'/>
+      </IconButton>
       <Dialog
         open={open}
         onClose={handleClose}
