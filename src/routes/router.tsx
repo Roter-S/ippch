@@ -2,14 +2,12 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import RootLayout from '../components/layouts/RootLayout'
 import PrivateLayout from '../components/layouts/PrivateLayout'
-import Login from '../pages/auth/Login'
-import Register from '../pages/auth/Register'
 import Dashboard from '../pages/dashboard'
-import User from '../pages/Users'
-import Settings from '../pages/Settings'
-import Ministries from '../pages/Ministries'
-import Cells from '../pages/Cells'
-import Roles from '../pages/Roles'
+import Users, { loader as LoaderUsers } from '../pages/Users'
+import IndexMinistries from '../pages/ministries/index'
+import ListMinistries, { loader as LoaderListMinistries } from '../pages/ministries/ListMinistries'
+import Ministry, { loader as LoaderMinistry } from '../pages/ministries/Ministry'
+import CreateMinistry, { loader as LoaderCreateMinistry } from '../pages/ministries/CreateMinistry'
 
 export const router = createBrowserRouter([
   {
@@ -18,11 +16,10 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Login />
-      },
-      {
-        path: 'register',
-        element: <Register />
+        async lazy () {
+          const { Login } = await import('../pages/auth/Login')
+          return { Component: Login }
+        }
       },
       {
         element: <PrivateLayout />,
@@ -34,23 +31,36 @@ export const router = createBrowserRouter([
           },
           {
             path: 'users',
-            element: <User />
-          },
-          {
-            path: 'roles',
-            element: <Roles />
+            element: <Users />,
+            loader: LoaderUsers
           },
           {
             path: 'ministries',
-            element: <Ministries />
-          },
-          {
-            path: 'cells',
-            element: <Cells />
+            element: <IndexMinistries />,
+            children: [
+              {
+                index: true,
+                loader: LoaderListMinistries,
+                element: <ListMinistries />
+              },
+              {
+                path: 'create',
+                loader: LoaderCreateMinistry,
+                element: <CreateMinistry />
+              },
+              {
+                path: ':ministryId',
+                loader: LoaderMinistry,
+                element: <Ministry />
+              }
+            ]
           },
           {
             path: 'settings',
-            element: <Settings />
+            async lazy () {
+              const { Settings } = await import('../pages/Settings')
+              return { Component: Settings }
+            }
           }
         ]
       }
