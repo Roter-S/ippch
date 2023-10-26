@@ -12,7 +12,7 @@ interface Props {
   window?: () => Window
 }
 
-const Private: React.FC<Props> = (props) => {
+const PrivateLayout: React.FC<Props> = (props) => {
   const { user } = useUserContext()
 
   const { window } = props
@@ -61,4 +61,4 @@ const Private: React.FC<Props> = (props) => {
       )
 }
 
-export default Private
+export default PrivateLayout
