@@ -148,6 +148,17 @@ const theme = createTheme({
           backdropFilter: 'blur(10px)'
         }
       }
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          cursor: 'pointer',
+          transition: 'color 0.2s ease-in-out',
+          ':hover': {
+            color: blue[900]
+          }
+        }
+      }
     }
   }
 })
