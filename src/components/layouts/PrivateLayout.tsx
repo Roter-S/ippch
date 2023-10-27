@@ -5,7 +5,6 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Navbar from '../common/Navbar'
 import MuiDrawer from '../common/drawer/MUIDrawer'
-
 const drawerWidth = 240
 
 interface Props {
@@ -25,7 +24,7 @@ const PrivateLayout: React.FC<Props> = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined
 
-  return user
+  return (Object.keys(user).length !== 0)
     ? (
     <Box sx={{ display: 'flex', px: '18px', py: '25px' }}>
       <Navbar

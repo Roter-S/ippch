@@ -49,7 +49,7 @@ const FirebaseFileUploader: React.FC<FirebaseFileUploaderProps> = ({
   }
 
   const handleFiles = (files: FileList | null) => {
-    if (files && files.length > 0) {
+    if ((files != null) && files.length > 0) {
       const newImageUrls: string[] = []
 
       for (let i = 0; i < files.length; i++) {

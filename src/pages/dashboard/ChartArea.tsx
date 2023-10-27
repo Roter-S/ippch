@@ -1,7 +1,6 @@
 import MainCard from '../../components/common/cards/MainCard'
 import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography, useTheme } from '@mui/material'
 import { LineChart } from '@mui/x-charts'
-import React from 'react'
 
 export default function ChartArea () {
   const theme = useTheme()
@@ -37,7 +36,7 @@ export default function ChartArea () {
         <ListItemText
           primary="Brunch this weekend?"
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 sx={{ display: 'inline' }}
                 component="span"
@@ -47,7 +46,7 @@ export default function ChartArea () {
                 Ali Connors
               </Typography>
               {" — I'll be in your neighborhood doing errands this…"}
-            </React.Fragment>
+            </>
           }
         />
       </ListItem>
@@ -59,7 +58,7 @@ export default function ChartArea () {
         <ListItemText
           primary="Summer BBQ"
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 sx={{ display: 'inline' }}
                 component="span"
@@ -69,7 +68,7 @@ export default function ChartArea () {
                 to Scott, Alex, Jennifer
               </Typography>
               {" — Wish I could come, but I'm out of town this…"}
-            </React.Fragment>
+            </>
           }
         />
       </ListItem>
@@ -81,7 +80,7 @@ export default function ChartArea () {
         <ListItemText
           primary="Oui Oui"
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 sx={{ display: 'inline' }}
                 component="span"
@@ -91,7 +90,7 @@ export default function ChartArea () {
                 Sandra Adams
               </Typography>
               {' — Do you have Paris recommendations? Have you ever…'}
-            </React.Fragment>
+            </>
           }
         />
       </ListItem>

@@ -179,7 +179,7 @@ const Users = () => {
           '@media (max-width: 600px)': {
             width: 'calc(100vw - 95px)'
           },
-          height: 650
+          height: 550
         }}
         rows={users}
         columns={columns}

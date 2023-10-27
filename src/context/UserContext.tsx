@@ -34,7 +34,7 @@ export default function UserContextProvider ({
     const unsubscribe = onAuthStateChanged(
       auth,
       (firebaseUser: FirebaseUser | null) => {
-        setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : false)
+        setUser((firebaseUser != null) ? mapFirebaseUser(firebaseUser) : false)
       }
     )
 
@@ -54,7 +54,7 @@ export default function UserContextProvider ({
   )
 }
 
-export const useUserContext = (): UserContextType => {
+export const useUserContext = () => {
   const context = useContext(UserContext)
   if (context === undefined) {
     throw new Error('useUserContext must be used within a UserContextProvider')

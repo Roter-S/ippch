@@ -5,7 +5,7 @@ export const useRedirectActiveUser = (user: any, path: string): void => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user) {
+    if (user !== false) {
       navigate(path)
     }
   }, [user, navigate, path])
