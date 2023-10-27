@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles'
 import MainCard from './MainCard'
 import { Box, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import Item from '../Grid/Item'
 import { type ReactNode } from 'react'
 
 interface CardProps {

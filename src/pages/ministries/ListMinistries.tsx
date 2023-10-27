@@ -1,11 +1,11 @@
 import React from 'react'
-import { useLoaderData, useNavigate } from 'react-router-dom'
+import { useLoaderData } from 'react-router-dom'
 import type { Ministries } from '../../types/Types'
 import { getCollection } from '../../utils/firestoreUtils'
 import { type GridRowId, type GridColDef, DataGrid, GridToolbar } from '@mui/x-data-grid'
 import AlertDelete from '../../components/common/AlertDelete'
-import { Button, Container, Divider, Grid, Typography } from '@mui/material'
-import AddBoxIcon from '@mui/icons-material/AddBox'
+import { Container, Divider, Grid, Typography } from '@mui/material'
+import MUIModal from '../../components/common/MUIModal'
 
 export async function loader () {
   const ministries: Ministries[] = await getCollection('ministries')
@@ -15,7 +15,6 @@ export async function loader () {
 const ListMinistries = () => {
   const [ministries, setMinistries] = React.useState<Ministries[]>([])
   const dataLoader = useLoaderData()
-  const navigate = useNavigate()
   React.useEffect(() => {
     if (dataLoader instanceof Array) {
       setMinistries(dataLoader as Ministries[])
@@ -56,7 +55,7 @@ const ListMinistries = () => {
           </Typography>
         </Grid>
         <Grid xs>
-          <Button onClick={() => { navigate('create') } } variant="contained" color='secondary' startIcon={<AddBoxIcon />}>Agregar</Button>
+          <MUIModal />
         </Grid>
       </Grid>
       <Divider />

@@ -15,11 +15,20 @@ import { getCollection } from './utils/firestoreUtils'
 import { type Setting } from './types/Types'
 
 const rootElement = document.getElementById('root')
-if (rootElement !== null) {
-  const setting: Setting[] = await getCollection('settings')
-  if (setting.length > 0) {
-    document.title = setting[0].name
+async function loadSettings () {
+  try {
+    const setting: Setting[] = await getCollection('settings')
+    if (setting.length > 0) {
+      document.title = setting[0].name
+    }
+  } catch (error) {
+    console.log(error)
   }
+}
+if (rootElement !== null) {
+  loadSettings().catch((error) => {
+    console.log(error)
+  })
 
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>

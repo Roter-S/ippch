@@ -38,7 +38,7 @@ const auth: Auth = getAuth(app)
 export const login = async ({ email, password }: { email: string, password: string }): Promise<UserCredential> =>
   await signInWithEmailAndPassword(auth, email, password)
 
-export const register = async ({ email, password }: { email: string, password: string }): Promise<UserCredential> => {
+export const register = async ({ email, password }: { email: string, password: string }) => {
   try {
     const auth = getAuth()
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
@@ -60,6 +60,6 @@ export const logOut = async (): Promise<void> => { await signOut(auth) }
 
 export { auth }
 
-export const db = getFirestore(app);
+export const db = getFirestore(app)
 
 export const storage = getStorage(app)

@@ -72,7 +72,7 @@ const Users = () => {
   }, [])
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setUsers(users.filter((user) => user.id !== id))
+    setUsers(users.filter((user) => user.uid !== id))
   }
 
   const columns: GridColDef[] = [

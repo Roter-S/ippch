@@ -12,6 +12,7 @@ interface Setting {
 }
 
 interface Ministries {
+  id: string
   name: string | null
   description: string
   groups?: DocumentReference[]

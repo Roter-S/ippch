@@ -18,6 +18,7 @@ interface MainCardProps {
 const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
   (
     {
+      title = 'Main Card',
       border = true,
       boxShadow,
       children,
@@ -35,11 +36,12 @@ const MainCard = forwardRef<HTMLDivElement, MainCardProps>(
     return (
       <Card
         ref={ref}
-        {...others}
+        component="div"
         sx={{
-          ...sx,
-          border: 'none'
+          border: 'none',
+          ...sx
         }}
+        {...others}
       >
         {content && (
           <CardContent sx={contentSX} className={contentClass}>
