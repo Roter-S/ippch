@@ -18,3 +18,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_IPPCH_2C05B }}'
           channelId: live
           projectId: ippch-2c05b
+      - name: firebase-config-env
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
