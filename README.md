@@ -1,5 +1,6 @@
-# IPPCH
+[![Deploy to Firebase Hosting on merge](https://github.com/Roter-S/ippch/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/Roter-S/ippch/actions/workflows/firebase-hosting-merge.yml)
 
+# IPPCH
 IPPCH is a web application designed to streamline the administration and workflow in evangelical churches. This comprehensive tool provides religious leaders, church members, and administrators with a centralized platform to efficiently manage all church activities and resources.
 
 ## Key Features

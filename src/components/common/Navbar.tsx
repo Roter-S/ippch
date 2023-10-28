@@ -48,12 +48,14 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
     handleCloseUserMenu()
   }
 
-  const handleLogout = async () => {
-    try {
-      await logOut()
-    } catch (error) {
-      console.log(error)
-    }
+  const handleLogout = (): void => {
+    logOut()
+      .then(() => {
+        navigate('/admin')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   const user = auth.currentUser as User
@@ -132,7 +134,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }: NavbarProps) => {
                 <SettingsApplicationsIcon />
                 <Typography textAlign="center">Configuración</Typography>
               </MenuItem>
-              <MenuItem onClick={handleLogout}>
+              <MenuItem onClick={() => { handleLogout() }}>
                 <ExitToAppIcon />
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>

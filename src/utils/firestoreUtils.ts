@@ -12,6 +12,8 @@ import {
   type QuerySnapshot,
   doc,
   addDoc
+  , type DocumentData,
+  setDoc
 } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL } from 'firebase/storage'
 import { storage, db } from '../services/firebase'
@@ -20,9 +22,35 @@ type QueryFilter = [string, any, any]
 
 export const createDocument = async <T>(collectionName: string, data: T) => {
   try {
-    await addDoc(collection(db, collectionName), data as Record<string, any>)
+    const documentRef = await addDoc(collection(db, collectionName), data as Record<string, any>)
+    return documentRef
   } catch (error) {
     console.error('Error creating document:', error)
+    throw error
+  }
+}
+
+export const createDocumentWithID = async <T>(collectionName: string, docId: string, data: T) => {
+  try {
+    const docRef = doc(db, collectionName, docId)
+    await setDoc(docRef, data as Record<string, any>)
+  } catch (error) {
+    console.error('Error creating document:', error)
+    throw error
+  }
+}
+
+export const updateDocument = async <T>(collectionName: string, docId: string, data: T) => {
+  try {
+    const docRef: DocumentReference = doc(db, collectionName, docId)
+    const docSnapshot = await getDoc(docRef)
+    if (docSnapshot.exists()) {
+      await updateDoc(docRef, data as Record<string, any>)
+    } else {
+      throw new Error('Document does not exist')
+    }
+  } catch (error) {
+    console.error('Error updating document:', error)
     throw error
   }
 }
@@ -53,10 +81,10 @@ export const getCollection = async (collectionName: string, filters: QueryFilter
 
   try {
     const querySnapshot: QuerySnapshot = await getDocs(queryRef)
-    const documents: any[] = []
+    const documents: DocumentData[] = []
 
     querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
-      documents.push({ id: doc.id, ...doc.data() })
+      documents.push(doc.data())
     })
 
     return documents
@@ -89,13 +117,27 @@ export const uploadFile = async (file: string, path: string) => {
   return url.toString()
 }
 
-export const getDocument = async (collectionName: string, docId: string) => {
-  const docRef = doc(db, collectionName, docId)
-  const docSnap = await getDoc(docRef)
+export const getDocument = async (
+  collectionName: string,
+  docId: string
+): Promise<DocumentData | undefined> => {
+  const docRef: DocumentReference = doc(db, collectionName, docId)
 
-  if (docSnap.exists()) {
-    return docSnap.data()
-  } else {
-    console.log('No such document!')
+  try {
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      return docSnap.data()
+    } else {
+      console.log('No such document!')
+      return undefined
+    }
+  } catch (error) {
+    console.error('Error fetching document:', error)
+    throw error
   }
+}
+
+export const getRef = (collectionName: string, docId: string) => {
+  return doc(db, collectionName, docId)
 }

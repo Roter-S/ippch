@@ -14,13 +14,12 @@ import { IconButton } from '@mui/material'
 interface Props {
   id: string
   collectionName: string
-  onUpdate: (uid: string) => void
+  onUpdate: (id: string) => void
 }
 
 export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
   const [open, setOpen] = React.useState(false)
   const [isSubmitting, setIsSubmitting] = React.useState(false)
-  const uid = id
 
   const handleClose = () => {
     setOpen(false)
@@ -30,7 +29,7 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
     await deleteDocument(collectionName, id)
     setOpen(false)
     setIsSubmitting(false)
-    onUpdate(uid)
+    onUpdate(id)
   }
 
   return (
@@ -39,7 +38,8 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
         onClick={() => { setOpen(true) }}
         sx={{
           m: 0,
-          p: 0.5
+          p: 0.5,
+          fontSize: 30
         }}
       >
         <DeleteIcon color='error'/>

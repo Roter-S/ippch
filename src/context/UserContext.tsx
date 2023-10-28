@@ -10,7 +10,7 @@ import { auth } from '../services/firebase'
 import Loader from '../components/common/Loader'
 
 interface User {
-  uid: string
+  id: string
   email: string | null
   photoURL: string | null
 }
@@ -34,7 +34,7 @@ export default function UserContextProvider ({
     const unsubscribe = onAuthStateChanged(
       auth,
       (firebaseUser: FirebaseUser | null) => {
-        setUser(firebaseUser ? mapFirebaseUser(firebaseUser) : false)
+        setUser((firebaseUser != null) ? mapFirebaseUser(firebaseUser) : false)
       }
     )
 
@@ -54,7 +54,7 @@ export default function UserContextProvider ({
   )
 }
 
-export const useUserContext = (): UserContextType => {
+export const useUserContext = () => {
   const context = useContext(UserContext)
   if (context === undefined) {
     throw new Error('useUserContext must be used within a UserContextProvider')
@@ -65,7 +65,7 @@ export const useUserContext = (): UserContextType => {
 // Helper function to map Firebase user to your user type
 function mapFirebaseUser (firebaseUser: FirebaseUser): User {
   return {
-    uid: firebaseUser.uid,
+    id: firebaseUser.id,
     email: firebaseUser.email,
     photoURL: firebaseUser.photoURL
   }

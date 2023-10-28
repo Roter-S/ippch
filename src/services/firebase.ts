@@ -43,13 +43,13 @@ export const register = async ({ email, password }: { email: string, password: s
     const auth = getAuth()
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     const user = {
-      uid: userCredential.user.uid,
+      id: userCredential.user.id,
       email: userCredential.user.email,
       displayName: userCredential.user.displayName,
       photoURL: userCredential.user.photoURL,
       roles: {}
     }
-    await createOrUpdateDocument('users', user.uid, user)
+    await createOrUpdateDocument('users', user.id, user)
     return userCredential
   } catch (error) {
     console.log(error)

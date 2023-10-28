@@ -10,10 +10,9 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component, roles, ...rest }) => {
   const { user } = useUserContext()
 
-  if (!user) {
+  if (user !== null) {
     return <Navigate to="/login" />
   }
-  console.log(user.uid)
 
   return <Component {...rest} />
 }
