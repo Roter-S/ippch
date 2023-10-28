@@ -1,1 +1,1 @@
-export const timerAlert = 1000
+export const timerAlert = 3000

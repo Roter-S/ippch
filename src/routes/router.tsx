@@ -7,7 +7,7 @@ import Users, { loader as LoaderUsers } from '../pages/Users'
 import IndexMinistries from '../pages/ministries/index'
 import ListMinistries, { loader as LoaderListMinistries } from '../pages/ministries/ListMinistries'
 import Ministry, { loader as LoaderMinistry } from '../pages/ministries/Ministry'
-import CreateMinistry, { loader as LoaderCreateMinistry } from '../pages/ministries/CreateMinistry'
+import CreateMinistry, { loader as LoaderCreateMinistry } from '../pages/ministries/Ministry'
 
 export const router = createBrowserRouter([
   {

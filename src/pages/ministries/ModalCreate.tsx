@@ -4,11 +4,12 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import AddBoxIcon from '@mui/icons-material/AddBox'
+import SaveIcon from '@mui/icons-material/Save'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { Grid, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { createDocument } from '../../utils/firestoreUtils'
+import { createDocument, updateDocument } from '../../utils/firestoreUtils'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -40,18 +41,20 @@ const MUIModal: React.FC<ModalProps> = ({ returnResponse }) => {
   })
 
   const handleSubmit = async (values: any) => {
-    await createDocument('ministries', values).then(() => {
+    try {
+      const requestDoc = await createDocument('ministries', values)
+      await updateDocument('ministries', requestDoc.id, { id: requestDoc.id })
       setOpenModal(false)
-      returnResponse('Se ha creado correctamente', 'success')
-    }).catch((error) => {
+      returnResponse('Ministerio creado correctamente', 'success')
+    } catch (error: Error | any) {
       setOpenModal(false)
       returnResponse(error.message, 'error')
-    })
+    }
   }
 
   return (
     <>
-      <Button variant="contained" color='secondary' startIcon={<AddBoxIcon />} onClick={() => { setOpenModal(true) }}>Crear</Button>
+      <Button variant="contained" color='primary' startIcon={<AddBoxIcon />} onClick={() => { setOpenModal(true) }}>Crear</Button>
       <Modal
         open={openModal}
         onClose={() => { setOpenModal(false) }}
@@ -93,15 +96,15 @@ const MUIModal: React.FC<ModalProps> = ({ returnResponse }) => {
                         <Grid container justifyContent={'space-between'} marginTop={3}>
                             <Button
                                 variant="outlined"
-                                color='secondary'
+                                color='error'
                                 onClick={() => { setOpenModal(false) }}
                             >
                                 Cancelar
                             </Button>
                             <LoadingButton
                                 variant="contained"
-                                color='secondary'
                                 type="submit"
+                                startIcon={<SaveIcon />}
                                 disabled={!isValid}
                                 loading={isSubmitting}
                                 >

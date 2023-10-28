@@ -15,26 +15,26 @@ interface Ministries {
   id: string
   name: string | null
   description: string
-  groups?: DocumentReference[]
-  leaders?: DocumentReference[]
-}
-
-interface Groups {
-  id: string
-  name: string | null
-  description: string
-  leaders: DocumentReference[]
-  members?: DocumentReference[]
+  groups?: DocumentReference[] | Group[]
 }
 
 interface User {
+  id?: string
   uid: string
   email: string
   displayName: string
   photoURL: string
   roles: string[]
-  ministries: DocumentReference[]
-  groups: DocumentReference[]
+  ministries: DocumentReference[] | Ministries[]
+  groups: DocumentReference[] | Groups[]
+}
+
+interface Groups {
+  id: string
+  name: string
+  description: string
+  leaders: DocumentReference[] | User[]
+  members?: DocumentReference[] | User[]
 }
 
 export type { Setting, Ministries, Groups, User, DataDocument }

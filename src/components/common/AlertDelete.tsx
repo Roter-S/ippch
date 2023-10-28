@@ -39,7 +39,8 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
         onClick={() => { setOpen(true) }}
         sx={{
           m: 0,
-          p: 0.5
+          p: 0.5,
+          fontSize: 30
         }}
       >
         <DeleteIcon color='error'/>

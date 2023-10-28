@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData } from 'react-router-dom'
-import type { Ministries } from '../../types/Types'
-import { getCollection } from '../../utils/firestoreUtils'
-import { type GridRowId, type GridColDef, DataGrid, GridToolbar } from '@mui/x-data-grid'
-import AlertDelete from '../../components/common/AlertDelete'
+import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Container, Divider, Grid, Typography } from '@mui/material'
+import PageviewIcon from '@mui/icons-material/Pageview'
+import { type GridRowId, type GridColDef, DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
+import AlertDelete from '../../components/common/AlertDelete'
 import ModalCreate from './ModalCreate'
 import MUISnackbar from '../../components/common/MUISnackbar'
 import { timerAlert } from '../../constants/constants'
+import { getCollection } from '../../utils/firestoreUtils'
+import type { Ministries } from '../../types/Types'
+import MainCard from '../../components/common/cards/MainCard'
 
 export async function loader () {
   const ministries: Ministries[] = await getCollection('ministries')
@@ -17,6 +19,7 @@ export async function loader () {
 const ListMinistries = () => {
   const [ministries, setMinistries] = useState<Ministries[]>([])
   const [alert, setAlert] = useState<{ message: string, type: 'success' | 'info' | 'warning' | 'error' } | null>(null)
+  const naigate = useNavigate()
   const dataLoader = useLoaderData()
   useEffect(() => {
     if (dataLoader instanceof Array) {
@@ -43,6 +46,14 @@ const ListMinistries = () => {
       cellClassName: 'actions',
       getActions: ({ id }) => {
         return [
+          <GridActionsCellItem
+            key={id}
+            icon={<PageviewIcon color='secondary' sx={{ fontSize: 30 }}/>}
+            label="Edit"
+            className="textPrimary"
+            onClick={() => { naigate(`${id}`) }}
+            color="inherit"
+          />,
           <AlertDelete
             key={id}
             id={String(id)}
@@ -62,48 +73,50 @@ const ListMinistries = () => {
   }
 
   return (
-    <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
-          <Typography variant="h4" component="h2" gutterBottom>
-            Ministerios
-          </Typography>
+    <MainCard sx={{ paddingTop: 5 }}>
+      <Container>
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <Typography variant="h4" component="h2" gutterBottom>
+              Ministerios
+            </Typography>
+          </Grid>
+          <Grid>
+            <ModalCreate returnResponse={(message, type) => {
+              showAlert(message, type)
+              void updateFetchMinistries()
+            }}/>
+          </Grid>
         </Grid>
-        <Grid>
-          <ModalCreate returnResponse={(message, type) => {
-            showAlert(message, type)
-            void updateFetchMinistries()
-          }}/>
+        <Divider />
+        <Grid container paddingTop={6} spacing={3}>
+          <Grid>
+          </Grid>
+          <Grid item xs={10}>
+            <DataGrid
+              sx={{
+                border: 'none',
+                '@media (max-width: 600px)': {
+                  width: 'calc(100vw - 120px)'
+                },
+                height: 550
+              }}
+              rows={ministries}
+              columns={columns}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true
+                }
+              }}
+            />
+          </Grid>
+          <Grid>
+          </Grid>
         </Grid>
-      </Grid>
-      <Divider />
-      <Grid container paddingTop={6} spacing={3}>
-        <Grid>
-        </Grid>
-        <Grid item xs={10}>
-          <DataGrid
-            sx={{
-              border: 'none',
-              '@media (max-width: 600px)': {
-                width: 'calc(100vw - 120px)'
-              },
-              height: 550
-            }}
-            rows={ministries}
-            columns={columns}
-            slots={{ toolbar: GridToolbar }}
-            slotProps={{
-              toolbar: {
-                showQuickFilter: true
-              }
-            }}
-          />
-        </Grid>
-        <Grid>
-        </Grid>
-      </Grid>
-      {alert !== null && <MUISnackbar autoHideDuration={timerAlert} vertical='top' horizontal='center' alert={alert}/>}
-    </Container>
+        {alert !== null && <MUISnackbar autoHideDuration={timerAlert} vertical='top' horizontal='center' alert={alert}/>}
+      </Container>
+    </MainCard>
   )
 }
 export default ListMinistries
