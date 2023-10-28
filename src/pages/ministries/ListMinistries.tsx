@@ -12,7 +12,7 @@ import type { Ministries } from '../../types/Types'
 import MainCard from '../../components/common/cards/MainCard'
 
 export async function loader () {
-  const ministries: Ministries[] = await getCollection('ministries')
+  const ministries: Ministries[] = await getCollection('ministries') as Ministries[]
   return ministries
 }
 
@@ -28,7 +28,7 @@ const ListMinistries = () => {
   }, [])
 
   const updateFetchMinistries = async () => {
-    const ministries: Ministries[] = await getCollection('ministries')
+    const ministries: Ministries[] = await getCollection('ministries') as Ministries[]
     setMinistries(ministries)
   }
 

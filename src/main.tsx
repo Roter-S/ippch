@@ -17,7 +17,7 @@ import { type Setting } from './types/Types'
 const rootElement = document.getElementById('root')
 async function loadSettings () {
   try {
-    const setting: Setting[] = await getCollection('settings')
+    const setting: Setting[] = await getCollection('settings') as Setting[]
     if (setting.length > 0) {
       document.title = setting[0].name
     }

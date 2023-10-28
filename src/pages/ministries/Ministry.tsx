@@ -25,7 +25,7 @@ import * as Yup from 'yup'
 
 export async function loader ({ params }: { params: { ministryId: string } }) {
   const data = { users: [], ministry: {} }
-  const users: User[] = await getCollection('users')
+  const users: User[] = await getCollection('users') as User[]
   const ministryDoc = await getDocument('ministries', params.ministryId)
   const ministry: Ministries | undefined = ministryDoc as Ministries | undefined
   const groupsCollection = await getCollection('groups')
@@ -33,7 +33,7 @@ export async function loader ({ params }: { params: { ministryId: string } }) {
   if (ministry != null && Array.isArray(ministry.groups) && ministry.groups.length > 0) {
     ministry.id = params.ministryId
     ministry.groups.forEach((group) => {
-      const groupMinistry: Groups[] = groupsCollection.filter((groupCollection) => groupCollection.id === group.id)
+      const groupMinistry: Groups[] = groupsCollection.filter((groupCollection) => groupCollection.id === group.id) as Groups[]
       if (groupMinistry.length > 0) {
         groupMinistry.forEach((group) => {
           group.leaders = group.leaders.map((leader) => {

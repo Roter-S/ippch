@@ -11,10 +11,10 @@ const SignInWithGoogle = () => {
     try {
       const result = await signInWithPopup(auth, provider)
       const user = result.user
-      const userFirestore = await getDocument('users', user.id)
+      const userFirestore = await getDocument('users', user.uid)
       if (userFirestore == null) {
-        await createDocumentWithID('users', user.id, {
-          id: user.id,
+        await createDocumentWithID('users', user.uid, {
+          id: user.uid,
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
@@ -23,7 +23,7 @@ const SignInWithGoogle = () => {
           roles: []
         })
       } else {
-        await updateDocument('users', user.id, {
+        await updateDocument('users', user.uid, {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
