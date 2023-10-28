@@ -22,7 +22,7 @@ export const Settings = () => {
   ) => {
     try {
       const url = await uploadFile(values.uploadedImages[0], 'settings/logo.png')
-      const setting: Setting[] = await getCollection('settings')
+      const setting: Setting[] = await getCollection('settings') as Setting[]
       if (Array.isArray(setting) && setting.length === 0) {
         const data = {
           logo: url,

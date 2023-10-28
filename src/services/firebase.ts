@@ -43,7 +43,7 @@ export const register = async ({ email, password }: { email: string, password: s
     const auth = getAuth()
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     const user = {
-      id: userCredential.user.id,
+      id: userCredential.user.uid,
       email: userCredential.user.email,
       displayName: userCredential.user.displayName,
       photoURL: userCredential.user.photoURL,

@@ -6,8 +6,7 @@ import Dashboard from '../pages/dashboard'
 import Users, { loader as LoaderUsers } from '../pages/Users'
 import IndexMinistries from '../pages/ministries/index'
 import ListMinistries, { loader as LoaderListMinistries } from '../pages/ministries/ListMinistries'
-import Ministry, { loader as LoaderMinistry } from '../pages/ministries/Ministry'
-import CreateMinistry, { loader as LoaderCreateMinistry } from '../pages/ministries/Ministry'
+import Ministry from '../pages/ministries/Ministry'
 
 export const router = createBrowserRouter([
   {
@@ -44,13 +43,11 @@ export const router = createBrowserRouter([
                 element: <ListMinistries />
               },
               {
-                path: 'create',
-                loader: LoaderCreateMinistry,
-                element: <CreateMinistry />
-              },
-              {
                 path: ':ministryId',
-                loader: LoaderMinistry,
+                async loader ({ params }: any) {
+                  const { loader } = await import('../pages/ministries/Ministry')
+                  return await loader({ params })
+                },
                 element: <Ministry />
               }
             ]

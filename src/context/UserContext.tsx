@@ -65,7 +65,7 @@ export const useUserContext = () => {
 // Helper function to map Firebase user to your user type
 function mapFirebaseUser (firebaseUser: FirebaseUser): User {
   return {
-    id: firebaseUser.id,
+    id: firebaseUser.uid,
     email: firebaseUser.email,
     photoURL: firebaseUser.photoURL
   }
