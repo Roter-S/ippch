@@ -4,61 +4,57 @@ import { Avatar, List, Divider, ListItem, ListItemText, Typography } from '@mui/
 import { getCollection } from '../utils/firestoreUtils'
 import AlertDelete from '../components/common/AlertDelete'
 import MainCard from '../components/common/cards/MainCard'
-import { getDoc } from 'firebase/firestore'
 import { type Ministries, type Groups, type User } from '../types/Types'
 import { useLoaderData } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 
-interface UserDocument {
-  id: string
-  displayName: string
-  email: string
-  photoURL: string
-  ministries: Ministries[]
-  groups: Groups[]
-  roles: string[]
-}
-
 export async function loader () {
-  const users: User[] = await getCollection('users')
-  const userDocuments: UserDocument[] = []
+  const users: User[] = await getCollection('users') as User[]
+  const ministries: Ministries[] = await getCollection('ministries') as Ministries[]
+  const groups: Groups[] = await getCollection('groups') as Groups[]
 
-  for (const user of users) {
-    const ministries = user.ministries
-    const ministriesDocs: Ministries[] = []
+  users.forEach((user) => {
+    if (user.groups.length > 0) {
+      const resultGroups: Groups[] = []
+      user.groups.forEach((group) => {
+        const groupUpdate: Groups = groups.find((item) => item.id === group.id) as Groups
+        if (groupUpdate !== undefined) {
+          if (groupUpdate.leaders.length > 0) {
+            const resultLeader: User[] = []
+            groupUpdate.leaders.forEach((leader) => {
+              const leaderUpdate = users.find((user) => user.id === leader.id)
+              if (leaderUpdate !== undefined) {
+                resultLeader.push(leaderUpdate)
+              }
+            })
+            groupUpdate.leaders = resultLeader
+          }
 
-    if (Array.isArray(ministries) && ministries.length > 0) {
-      for (const ministry of ministries) {
-        const ministryDoc = await getDoc(ministry)
-        if (ministryDoc.exists()) {
-          ministriesDocs.push(ministryDoc.data() as Ministries)
+          if (groupUpdate.members !== undefined && groupUpdate.members.length > 0) {
+            const resultMembers: User[] = []
+            groupUpdate.members.forEach((member) => {
+              const memberUpdate = users.find((user) => user.id === member.id)
+              if (memberUpdate !== undefined) {
+                resultMembers.push(memberUpdate)
+              }
+            })
+            groupUpdate.members = resultMembers
+          }
+          resultGroups.push(groupUpdate)
         }
-      }
-    }
-
-    const groups = user.groups
-    const groupsDocs: Groups[] = []
-
-    if (Array.isArray(groups) && groups.length > 0) {
-      for (const group of groups) {
-        const groupDoc = await getDoc(group)
-        if (groupDoc.exists()) {
-          groupsDocs.push(groupDoc.data() as Groups)
+      })
+      user.groups = resultGroups
+      const resultMinistries: Ministries[] = []
+      user.ministries.forEach((ministry) => {
+        const ministryUpdate = ministries.find((item) => item.id === ministry.id)
+        if (ministryUpdate !== undefined) {
+          resultMinistries.push(ministryUpdate)
         }
-      }
+      })
+      user.ministries = resultMinistries
     }
-
-    userDocuments.push({
-      id: user.uid,
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      ministries: ministriesDocs,
-      groups: groupsDocs,
-      roles: user.roles
-    })
-  }
-  return userDocuments
+  })
+  return users
 }
 
 const Users = () => {
@@ -72,7 +68,7 @@ const Users = () => {
   }, [])
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setUsers(users.filter((user) => user.uid !== id))
+    setUsers(users.filter((user) => user.id !== id))
   }
 
   const columns: GridColDef[] = [

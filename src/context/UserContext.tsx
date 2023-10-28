@@ -10,7 +10,7 @@ import { auth } from '../services/firebase'
 import Loader from '../components/common/Loader'
 
 interface User {
-  uid: string
+  id: string
   email: string | null
   photoURL: string | null
 }
@@ -65,7 +65,7 @@ export const useUserContext = () => {
 // Helper function to map Firebase user to your user type
 function mapFirebaseUser (firebaseUser: FirebaseUser): User {
   return {
-    uid: firebaseUser.uid,
+    id: firebaseUser.id,
     email: firebaseUser.email,
     photoURL: firebaseUser.photoURL
   }

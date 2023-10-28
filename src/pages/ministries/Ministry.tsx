@@ -37,12 +37,12 @@ export async function loader ({ params }: { params: { ministryId: string } }) {
       if (groupMinistry.length > 0) {
         groupMinistry.forEach((group) => {
           group.leaders = group.leaders.map((leader) => {
-            const user = users.find((user) => user.uid === leader.id)
+            const user = users.find((user) => user.id === leader.id)
             return user as User
           })
           if (Array.isArray(group.members) && group.members.length > 0) {
             group.members = group.members.map((member) => {
-              const user = users.find((user) => user.uid === member.id)
+              const user = users.find((user) => user.id === member.id)
               return user as User
             })
           }
@@ -110,7 +110,7 @@ const CreateMinistry = () => {
 
   useEffect(() => {
     const usersList: UserList[] = dataLoader.users.map((user) => ({
-      id: user.uid,
+      id: user.id,
       name: user.displayName
     }))
     setUsers(usersList)
@@ -347,12 +347,12 @@ const CreateMinistry = () => {
       const membersDoc: User[] = group.members?.filter((member) => member !== undefined) as User[]
 
       const leaders: UserList[] = leadersDoc.map((leader) => ({
-        id: leader.uid,
+        id: leader.id,
         name: leader.displayName
       }))
 
       const members: UserList[] = membersDoc.map((member) => ({
-        id: member.uid,
+        id: member.id,
         name: member.displayName
       }))
 

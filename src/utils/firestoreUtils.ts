@@ -81,10 +81,10 @@ export const getCollection = async (collectionName: string, filters: QueryFilter
 
   try {
     const querySnapshot: QuerySnapshot = await getDocs(queryRef)
-    const documents: any[] = []
+    const documents: DocumentData[] = []
 
     querySnapshot.forEach((doc: QueryDocumentSnapshot) => {
-      documents.push({ id: doc.id, ...doc.data() })
+      documents.push(doc.data())
     })
 
     return documents
