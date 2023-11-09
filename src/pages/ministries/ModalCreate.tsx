@@ -26,7 +26,7 @@ interface ModalProps {
   returnResponse: (message: string, type: 'success' | 'info' | 'warning' | 'error') => void
 }
 
-const MUIModal: React.FC<ModalProps> = ({ returnResponse }) => {
+const ModalCreate: React.FC<ModalProps> = ({ returnResponse }) => {
   const [openModal, setOpenModal] = React.useState(false)
 
   const MinistriesSchema = Yup.object().shape({
@@ -119,4 +119,4 @@ const MUIModal: React.FC<ModalProps> = ({ returnResponse }) => {
     </>
   )
 }
-export default MUIModal
+export default ModalCreate

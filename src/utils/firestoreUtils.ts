@@ -15,7 +15,7 @@ import {
   , type DocumentData,
   setDoc
 } from 'firebase/firestore'
-import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import { ref, uploadString, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage'
 import { storage, db } from '../services/firebase'
 
 type QueryFilter = [string, any, any]
@@ -110,11 +110,26 @@ export const deleteDocument = async (collectionName: string, docId: string) => {
   }
 }
 
-export const uploadFile = async (file: string, path: string) => {
+export const uploadFileString = async (file: string, path: string) => {
   const storageRef = ref(storage, path)
   await uploadString(storageRef, file, 'data_url')
   const url = await getDownloadURL(storageRef)
   return url.toString()
+}
+
+export const uploadFile = async (file: Blob | Uint8Array | ArrayBuffer, path: string) => {
+  const storageRef = ref(storage, path)
+  await uploadBytes(storageRef, file)
+  const url = await getDownloadURL(storageRef)
+  return { url: url.toString(), path }
+}
+
+export const deleteFile = async (path: string) => {
+  const desertRef = ref(storage, path)
+  deleteObject(desertRef).then(() => { return true }).catch((error) => {
+    console.error('Error deleting file:', error)
+    throw error
+  })
 }
 
 export const getDocument = async (

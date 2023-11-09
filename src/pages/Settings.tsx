@@ -5,7 +5,7 @@ import FirebaseFileUploader from '../components/common/inputs/FirebaseFileUpload
 import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { createDocument, createOrUpdateDocument, getCollection, uploadFile } from '../utils/firestoreUtils'
+import { createDocument, createOrUpdateDocument, getCollection, uploadFileString } from '../utils/firestoreUtils'
 import MainCard from '../components/common/cards/MainCard'
 import { type Setting } from '../types/Types'
 
@@ -21,7 +21,7 @@ export const Settings = () => {
     { setSubmitting, resetForm }: any
   ) => {
     try {
-      const url = await uploadFile(values.uploadedImages[0], 'settings/logo.png')
+      const url = await uploadFileString(values.uploadedImages[0], 'settings/logo.png')
       const setting: Setting[] = await getCollection('settings') as Setting[]
       if (Array.isArray(setting) && setting.length === 0) {
         const data = {

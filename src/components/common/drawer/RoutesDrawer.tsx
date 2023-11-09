@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import { type Setting } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
+import NewspaperIcon from '@mui/icons-material/Newspaper'
 
 const RoutesDrawer = () => {
   const location = useLocation()
@@ -72,6 +73,11 @@ const RoutesDrawer = () => {
             title: 'Ministerios',
             icon: <AccountTreeIcon />,
             to: '/admin/ministries'
+          },
+          {
+            title: 'Noticicias',
+            icon: <NewspaperIcon />,
+            to: '/admin/advertisements'
           }
         ].map((text, index) => (
           <ListItem

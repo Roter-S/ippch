@@ -5,9 +5,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
+import DeleteIcon from '@mui/icons-material/Delete'
 import WarningIcon from '@mui/icons-material/Warning'
-import { deleteDocument } from '../../utils/firestoreUtils'
+import { deleteDocument, deleteFile, getDocument } from '../../utils/firestoreUtils'
 import { LoadingButton } from '@mui/lab'
 import { IconButton } from '@mui/material'
 
@@ -25,11 +25,19 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
     setOpen(false)
   }
   const handleDelete = async () => {
-    setIsSubmitting(true)
-    await deleteDocument(collectionName, id)
-    setOpen(false)
-    setIsSubmitting(false)
-    onUpdate(id)
+    try {
+      setIsSubmitting(true)
+      if (collectionName === 'advertisements') {
+        const advertisement = await getDocument(collectionName, id)
+        await deleteFile(advertisement?.imagePath)
+      }
+      await deleteDocument(collectionName, id)
+      setOpen(false)
+      setIsSubmitting(false)
+      onUpdate(id)
+    } catch (error: Error | any) {
+      console.log(error)
+    }
   }
 
   return (

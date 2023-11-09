@@ -13,7 +13,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { LoadingButton, TabContext, TabList, TabPanel } from '@mui/lab'
 import SaveIcon from '@mui/icons-material/Save'
 import SelectMultiple from '../../components/common/inputs/SelectMultiple'
-import Item from '../../components/common/Grid/Item'
+import Item from '../../components/common/grid/Item'
 import MainCard from '../../components/common/cards/MainCard'
 import MUISnackbar from '../../components/common/MUISnackbar'
 import ListGroup from './ListGroup'
@@ -343,7 +343,7 @@ const CreateMinistry = () => {
   const editGroup = (id: string) => {
     const group: Groups | undefined = ministryData.groups?.find((group) => group.id === id)
     if (group != null) {
-      const leadersDoc: User[] = group.leaders.filter((leader) => leader !== undefined) as User[]
+      const leadersDoc: User[] = group.leaders.filter((leader) => leader !== undefined)
       const membersDoc: User[] = group.members?.filter((member) => member !== undefined) as User[]
 
       const leaders: UserList[] = leadersDoc.map((leader) => ({
@@ -382,10 +382,11 @@ const CreateMinistry = () => {
   }
 
   return (
-    <>
+    <Box sx={{ width: '100%', paddingTop: '20px' }}>
       <Link onClick={() => { navigate('/admin/ministries') }} variant="h5" underline="none">
         <ArrowBackIcon /> Regresar
       </Link>
+
       <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'center' }}>
@@ -467,7 +468,7 @@ const CreateMinistry = () => {
 
         <TabPanel value="2">
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={8}>
               <Item>
                 <MainCard>
                     <Typography variant="h5" component="h2" gutterBottom>
@@ -572,7 +573,7 @@ const CreateMinistry = () => {
                 </MainCard>
               </Item>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <Item>
                 <MainCard>
                     <Typography variant="h5" component="h2" gutterBottom>
@@ -587,7 +588,7 @@ const CreateMinistry = () => {
       </TabContext>
       </Box>
       {alert !== null && <MUISnackbar autoHideDuration={timerAlert} vertical='top' horizontal='center' alert={alert}/>}
-    </>
+    </Box>
   )
 }
 

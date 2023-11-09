@@ -7,6 +7,7 @@ import Users, { loader as LoaderUsers } from '../pages/Users'
 import IndexMinistries from '../pages/ministries/index'
 import ListMinistries, { loader as LoaderListMinistries } from '../pages/ministries/ListMinistries'
 import Ministry from '../pages/ministries/Ministry'
+import Advertisements from '../pages/advertisements'
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
               const { Settings } = await import('../pages/Settings')
               return { Component: Settings }
             }
+          },
+          {
+            path: 'advertisements',
+            element: <Advertisements/>
           }
         ]
       }
