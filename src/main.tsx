@@ -13,6 +13,7 @@ import '@fontsource/roboto/700.css'
 import './assets/css/Main.css'
 import { getCollection } from './utils/firestoreUtils'
 import { type Setting } from './types/Types'
+import { AlertProvider } from './context/AlertContext'
 
 const rootElement = document.getElementById('root')
 async function loadSettings () {
@@ -34,7 +35,9 @@ if (rootElement !== null) {
     <React.StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+          <AlertProvider>
+            <RouterProvider router={router} />
+          </AlertProvider>
       </ThemeProvider>
     </React.StrictMode>
   )

@@ -5,11 +5,10 @@ import PageviewIcon from '@mui/icons-material/Pageview'
 import { type GridRowId, type GridColDef, DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
 import AlertDelete from '../../components/common/AlertDelete'
 import ModalCreate from './ModalCreate'
-import MUISnackbar from '../../components/common/MUISnackbar'
-import { timerAlert } from '../../constants/constants'
 import { getCollection } from '../../utils/firestoreUtils'
 import type { Ministries } from '../../types/Types'
 import MainCard from '../../components/common/cards/MainCard'
+import { useAlert } from '../../context/AlertContext'
 
 export async function loader () {
   const ministries: Ministries[] = await getCollection('ministries') as Ministries[]
@@ -17,8 +16,8 @@ export async function loader () {
 }
 
 const ListMinistries = () => {
+  const showAlert = useAlert()
   const [ministries, setMinistries] = useState<Ministries[]>([])
-  const [alert, setAlert] = useState<{ message: string, type: 'success' | 'info' | 'warning' | 'error' } | null>(null)
   const naigate = useNavigate()
   const dataLoader = useLoaderData()
   useEffect(() => {
@@ -65,13 +64,6 @@ const ListMinistries = () => {
     }
   ]
 
-  const showAlert = (message: string, type: 'success' | 'info' | 'warning' | 'error') => {
-    setAlert({ message, type })
-    setTimeout(() => {
-      setAlert(null)
-    }, timerAlert)
-  }
-
   return (
     <MainCard sx={{ paddingTop: 5 }}>
       <Container>
@@ -114,7 +106,6 @@ const ListMinistries = () => {
           <Grid>
           </Grid>
         </Grid>
-        {alert !== null && <MUISnackbar autoHideDuration={timerAlert} vertical='top' horizontal='center' alert={alert}/>}
       </Container>
     </MainCard>
   )

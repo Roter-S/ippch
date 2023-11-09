@@ -15,13 +15,12 @@ import SaveIcon from '@mui/icons-material/Save'
 import SelectMultiple from '../../components/common/inputs/SelectMultiple'
 import Item from '../../components/common/grid/Item'
 import MainCard from '../../components/common/cards/MainCard'
-import MUISnackbar from '../../components/common/MUISnackbar'
 import ListGroup from './ListGroup'
-import { timerAlert } from '../../constants/constants'
 import { createDocument, getCollection, getDocument, getRef, updateDocument } from '../../utils/firestoreUtils'
 import { type Groups, type Ministries, type User } from '../../types/Types'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
+import { useAlert } from '../../context/AlertContext'
 
 export async function loader ({ params }: { params: { ministryId: string } }) {
   const data = { users: [], ministry: {} }
@@ -87,6 +86,7 @@ interface MinistriesWithGroups {
 }
 
 const CreateMinistry = () => {
+  const showAlert = useAlert()
   const dataLoader = useLoaderData() as DataLoader
   const navigate = useNavigate()
   const [users, setUsers] = useState<UserList[]>([])
@@ -105,7 +105,6 @@ const CreateMinistry = () => {
     groups: []
   })
   const [formGroupErrors, setFormGroupErrors] = useState<Record<string, string>>({})
-  const [alert, setAlert] = useState<{ message: string, type: 'success' | 'info' | 'warning' | 'error' } | null>(null)
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
@@ -325,13 +324,6 @@ const CreateMinistry = () => {
     } else {
       setFormGroupErrors(errors)
     }
-  }
-
-  const showAlert = (message: string, type: 'success' | 'info' | 'warning' | 'error') => {
-    setAlert({ message, type })
-    setTimeout(() => {
-      setAlert(null)
-    }, timerAlert)
   }
 
   const [value, setValue] = useState('2')
@@ -587,7 +579,6 @@ const CreateMinistry = () => {
         </TabPanel>
       </TabContext>
       </Box>
-      {alert !== null && <MUISnackbar autoHideDuration={timerAlert} vertical='top' horizontal='center' alert={alert}/>}
     </Box>
   )
 }
