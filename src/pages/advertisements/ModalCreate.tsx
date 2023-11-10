@@ -92,9 +92,9 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
     try {
       if (user != null) {
         const image = await uploadFile(values.image, `advertisements/${uuidv4()}`)
-        const userRef = getRef('users', user.id)
-        const ministriesRef = values.ministries.map((ministryId: string) => ministryId != null ? getRef('ministries', ministryId) : null).filter((ministry: any) => ministry != null)
-        const groupsRef = values.groups.map((groupId: string) => groupId != null ? getRef('groups', groupId) : null).filter((group: any) => group != null)
+        const userRef = await getRef('users', user.id)
+        const ministriesRef = values.ministries.map(async (ministryId: string) => ministryId != null ? await getRef('ministries', ministryId) : null).filter((ministry: any) => ministry != null)
+        const groupsRef = values.groups.map(async (groupId: string) => groupId != null ? await getRef('groups', groupId) : null).filter((group: any) => group != null)
         const data = {
           title: values.title,
           description: values.description,
@@ -107,7 +107,7 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
           endDate: new Date(values.endDate),
           ministries: ministriesRef,
           groups: groupsRef,
-          type: 'general'
+          type: groupsRef.length > 0 ? 'group' : ministriesRef.length > 0 ? 'ministry' : 'general'
         }
 
         const ad = await createDocument('advertisements', data)

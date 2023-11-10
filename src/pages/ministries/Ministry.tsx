@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useEffect, useState } from 'react'
+import { type SyntheticEvent, useState } from 'react'
 import {
   Box,
   FormHelperText,
@@ -18,45 +18,33 @@ import MainCard from '../../components/common/cards/MainCard'
 import ListGroup from './ListGroup'
 import { createDocument, getCollection, getDocument, getRef, updateDocument } from '../../utils/firestoreUtils'
 import { type Groups, type Ministries, type User } from '../../types/Types'
-import { Formik, Form, Field } from 'formik'
-import * as Yup from 'yup'
+
 import { useAlert } from '../../context/AlertContext'
+import EditMinistry from './EditMinistry'
 
 export async function loader ({ params }: { params: { ministryId: string } }) {
-  const data = { users: [], ministry: {} }
-  const users: User[] = await getCollection('users') as User[]
-  const ministryDoc = await getDocument('ministries', params.ministryId)
-  const ministry: Ministries | undefined = ministryDoc as Ministries | undefined
-  const groupsCollection = await getCollection('groups')
-  const updatedGroups: Groups[] | undefined = []
-  if (ministry != null && Array.isArray(ministry.groups) && ministry.groups.length > 0) {
-    ministry.id = params.ministryId
-    ministry.groups.forEach((group) => {
-      const groupMinistry: Groups[] = groupsCollection.filter((groupCollection) => groupCollection.id === group.id) as Groups[]
-      if (groupMinistry.length > 0) {
-        groupMinistry.forEach((group) => {
-          group.leaders = group.leaders.map((leader) => {
-            const user = users.find((user) => user.id === leader.id)
-            return user as User
-          })
-          if (Array.isArray(group.members) && group.members.length > 0) {
-            group.members = group.members.map((member) => {
-              const user = users.find((user) => user.id === member.id)
-              return user as User
-            })
-          }
+  const users = (await getCollection('users'))
+  const ministry = (await getDocument('ministries', params.ministryId))
+  const ministryRef = await getRef('ministries', params.ministryId)
+  const groups = await getCollection('groups', { filters: [['ministry', '==', ministryRef]] })
+  if (users != null && ministry != null && groups != null) {
+    groups.forEach((group) => {
+      if (Array.isArray(group.leaders)) {
+        group.leaders = group.leaders.map((leader: { id: string | undefined }) => {
+          const user = users.find((user) => user.id === leader.id)
+          return user as User
         })
       }
-      updatedGroups?.push(...groupMinistry)
+      if (Array.isArray(group.members)) {
+        group.members = group.members.map((member: { id: string | undefined }) => {
+          const user = users.find((user) => user.id === member.id)
+          return user as User
+        })
+      }
     })
-    ministry.groups = updatedGroups
-  }
-  if (Array.isArray(users) && users.length > 0) {
-    data.users = users as never[]
-    data.ministry = ministry as never
-    return data
+    return { users, ministry, groups }
   } else {
-    return { users: [], ministry: {} }
+    return { users: [], ministry: {}, groups: [] }
   }
 }
 
@@ -76,6 +64,7 @@ interface initialValues {
 interface DataLoader {
   users: User[]
   ministry: Ministries
+  groups: Groups[]
 }
 
 interface MinistriesWithGroups {
@@ -85,11 +74,12 @@ interface MinistriesWithGroups {
   groups?: Groups[]
 }
 
-const CreateMinistry = () => {
+const Ministry = () => {
+  const navigate = useNavigate()
   const showAlert = useAlert()
   const dataLoader = useLoaderData() as DataLoader
-  const navigate = useNavigate()
-  const [users, setUsers] = useState<UserList[]>([])
+  const [groups, setGroups] = useState<Groups[]>(dataLoader.groups)
+  const [ministry, setMinistry] = useState<MinistriesWithGroups>(dataLoader.ministry as MinistriesWithGroups)
   const [formDataGroup, setFormDataGroup] = useState<initialValues>({
     name: '',
     description: '',
@@ -98,42 +88,18 @@ const CreateMinistry = () => {
   })
   const [selectedLeaders, setSelectedLeaders] = useState([])
   const [selectedMembers, setSelectedMembers] = useState([])
-  const [ministryData, setMinistryData] = useState<MinistriesWithGroups>({
-    id: '',
-    name: '',
-    description: '',
-    groups: []
-  })
   const [formGroupErrors, setFormGroupErrors] = useState<Record<string, string>>({})
+  const [value, setValue] = useState('2')
   const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const users: User[] = dataLoader.users
+  const usersList: UserList[] = dataLoader.users.map((user) => ({
+    id: user.id,
+    name: user.displayName
+  }))
 
-  useEffect(() => {
-    const usersList: UserList[] = dataLoader.users.map((user) => ({
-      id: user.id,
-      name: user.displayName
-    }))
-    setUsers(usersList)
-    setMinistryData(dataLoader.ministry as MinistriesWithGroups)
-  }, [dataLoader])
-
-  const MinistrySchema = Yup.object().shape({
-    name: Yup.string()
-      .min(5, '¡Muy corto!')
-      .max(30, 'Demasiado largo')
-      .required('Es obligatorio'),
-    description: Yup.string()
-      .min(10, '¡Muy corto!')
-      .max(250, 'Demasiado largo')
-      .required('Es obligatorio')
-  })
-
-  const handleSubmitMinistry = async (value: any) => {
-    try {
-      await updateDocument('ministries', ministryData.id, value)
-      showAlert('Se ha guardado correctamente', 'success')
-    } catch (error: Error | any) {
-      showAlert(error.message, 'error')
-    }
+  const handleChange = (_event: SyntheticEvent, newValue: string) => {
+    setValue(newValue)
   }
 
   const handleInputChangeGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -156,10 +122,11 @@ const CreateMinistry = () => {
   }
 
   const updateFormDataGroup = async () => {
-    const fetchMinistry = await getDocument('ministries', ministryData.id)
-    const newGroups = await getCollection('groups')
+    const fetchMinistry = await getDocument('ministries', ministry.id)
+    const ministryRef = await getRef('ministries', ministry.id)
+    const newGroups: Groups[] = await getCollection('groups', { filters: [['ministry', '==', ministryRef]] }) as Groups[]
     if ((fetchMinistry != null) && (newGroups != null)) {
-      newGroups.forEach((group) => {
+      newGroups.forEach((group: Groups) => {
         if (Array.isArray(group.leaders)) {
           group.leaders = group.leaders.map((leader: { id: string | undefined }) => {
             const user = dataLoader.users.find((user) => user.id === leader.id)
@@ -173,8 +140,8 @@ const CreateMinistry = () => {
           })
         }
       })
-      fetchMinistry.groups = newGroups
-      setMinistryData(fetchMinistry as MinistriesWithGroups)
+      setGroups(newGroups)
+      setMinistry(fetchMinistry as MinistriesWithGroups)
       setFormDataGroup({
         name: '',
         description: '',
@@ -208,15 +175,18 @@ const CreateMinistry = () => {
     }
 
     if (Object.keys(errors).length === 0) {
-      formDataGroup.leaders = formDataGroup.leaders.map((leader) => {
-        return getRef('users', leader.id)
-      })
-      formDataGroup.members = formDataGroup.members.map((member) => {
-        return getRef('users', member.id)
-      })
-
+      formDataGroup.leaders = await Promise.all(
+        formDataGroup.leaders.map(async (leader) => {
+          return await getRef('users', leader.id)
+        })
+      )
+      formDataGroup.members = await Promise.all(
+        formDataGroup.members.map(async (member) => {
+          return await getRef('users', member.id)
+        })
+      )
       const dataGroup = {
-        ministry: getRef('ministries', ministryData.id),
+        ministry: await getRef('ministries', ministry.id),
         name: formDataGroup.name,
         description: formDataGroup.description,
         leaders: formDataGroup.leaders,
@@ -224,6 +194,7 @@ const CreateMinistry = () => {
       }
 
       try {
+        setLoading(true)
         if ((formDataGroup.id != null) && isEditing) {
           if (formDataGroup.leaders.length > 0) {
             await Promise.all(formDataGroup.leaders.map(async (leader) => {
@@ -236,7 +207,7 @@ const CreateMinistry = () => {
 
                 const groups: any[] = fetchUser.groups ?? []
                 if (formDataGroup.id != null) {
-                  const getRefGroup = getRef('groups', formDataGroup.id)
+                  const getRefGroup = await getRef('groups', formDataGroup.id)
                   const containsGroup = groups.some(ref => ref.id === getRefGroup.id)
                   if (!containsGroup) {
                     groups.push(getRefGroup)
@@ -244,7 +215,7 @@ const CreateMinistry = () => {
                 }
 
                 const ministries: any[] = fetchUser.ministries ?? []
-                const getRefMinistry = getRef('ministries', ministryData.id)
+                const getRefMinistry = await getRef('ministries', ministry.id)
                 const containsMinistry = ministries.some(ref => ref.id === getRefMinistry.id)
                 if (!containsMinistry) {
                   ministries.push(getRefMinistry)
@@ -268,14 +239,14 @@ const CreateMinistry = () => {
                 }
                 const groups: any[] = fetchUser.groups ?? []
                 if (formDataGroup.id != null) {
-                  const getRefGroup = getRef('groups', formDataGroup.id)
+                  const getRefGroup = await getRef('groups', formDataGroup.id)
                   const containsGroup = groups.some(ref => ref.id === getRefGroup.id)
                   if (!containsGroup) {
                     groups.push(getRefGroup)
                   }
                 }
                 const ministries: any[] = fetchUser.ministries ?? []
-                const getRefMinistry = getRef('ministries', ministryData.id)
+                const getRefMinistry = await getRef('ministries', ministry.id)
                 const containsMinistry = ministries.some(ref => ref.id === getRefMinistry.id)
                 if (!containsMinistry) {
                   ministries.push(getRefMinistry)
@@ -296,21 +267,23 @@ const CreateMinistry = () => {
           void updateFormDataGroup()
           showAlert('Se ha editado correctamente', 'success')
         } else {
-          if (ministryData.groups == null) {
-            ministryData.groups = []
+          if (ministry.groups == null) {
+            ministry.groups = []
           }
-          const oldGroups = ministryData.groups.map((group) => getRef('groups', group.id))
+          const oldGroups = ministry.groups.map(async (group) => await getRef('groups', group.id))
+          console.log(dataGroup)
           const newGroup = await createDocument('groups', dataGroup)
           await updateDocument('groups', newGroup.id, {
             id: newGroup.id
           })
-          await updateDocument('ministries', ministryData.id, {
+          await updateDocument('ministries', ministry.id, {
             groups: [...oldGroups, newGroup]
           })
           formDataGroup.id = newGroup.id
           void updateFormDataGroup()
           showAlert('Se ha guardado correctamente', 'success')
         }
+        setLoading(false)
       } catch (error: Error | any) {
         showAlert(error.message, 'error')
       }
@@ -326,14 +299,8 @@ const CreateMinistry = () => {
     }
   }
 
-  const [value, setValue] = useState('2')
-
-  const handleChange = (_event: SyntheticEvent, newValue: string) => {
-    setValue(newValue)
-  }
-
   const editGroup = (id: string) => {
-    const group: Groups | undefined = ministryData.groups?.find((group) => group.id === id)
+    const group: Groups | undefined = groups.find((group) => group.id === id)
     if (group != null) {
       const leadersDoc: User[] = group.leaders.filter((leader) => leader !== undefined)
       const membersDoc: User[] = group.members?.filter((member) => member !== undefined) as User[]
@@ -382,80 +349,13 @@ const CreateMinistry = () => {
       <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'center' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label={ministryData.name} value="1" />
+          <TabList onChange={handleChange}>
+            <Tab label={ministry.name} value="1" />
             <Tab label="Grupos" value="2" />
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Grid container justifyContent="center">
-            <Grid item xs={12} sm={12} md={10} lg={5}>
-              <MainCard>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  Editar Ministerio
-                </Typography>
-                <Box sx={{ flexGrow: 1, marginTop: 6 }}>
-                  <Formik
-                    initialValues={{
-                      name: ministryData.name,
-                      description: ministryData.description
-                    }}
-                    validationSchema={MinistrySchema}
-                    onSubmit={handleSubmitMinistry}
-                  >
-                    {({ isSubmitting, errors, isValid }) => (
-                      <Form>
-                        <Grid container>
-                          <Grid item xs={12} sm={12} md={12}>
-                            <Item>
-                              <Field
-                                as={TextField}
-                                label="Nombre del Ministerio"
-                                fullWidth
-                                type="text"
-                                name="name"
-                                variant="outlined"
-                                error={Boolean(errors?.name)}
-                                helperText={errors?.name}
-                              />
-                            </Item>
-                            <Item>
-                              <Field
-                                as={TextField}
-                                label="Descripción del Ministerio"
-                                fullWidth
-                                multiline
-                                rows={4}
-                                type="text"
-                                name="description"
-                                variant="outlined"
-                                error={Boolean(errors?.description)}
-                                helperText={errors?.description}
-                              />
-                            </Item>
-                          </Grid>
-                        </Grid>
-                        <Grid container justifyContent="flex-end">
-                          <Grid item>
-                            <LoadingButton
-                              variant="contained"
-                              type="submit"
-                              color='secondary'
-                              startIcon={<SaveIcon />}
-                              disabled={!isValid}
-                              loading={isSubmitting}
-                            >
-                              Guardar
-                            </LoadingButton>
-                          </Grid>
-                        </Grid>
-                      </Form>
-                    )}
-                  </Formik>
-                </Box>
-              </MainCard>
-            </Grid>
-          </Grid>
+          <EditMinistry ministry={ministry} />
         </TabPanel>
 
         <TabPanel value="2">
@@ -505,7 +405,7 @@ const CreateMinistry = () => {
                             <Item>
                               <SelectMultiple
                                 label="Asignar líder"
-                                items={users}
+                                items={usersList}
                                 selectedItems={selectedLeaders}
                                 onUpdate={(options) => {
                                   const leaders: UserList[] = options.map((option) => {
@@ -521,7 +421,7 @@ const CreateMinistry = () => {
                             <Item>
                               <SelectMultiple
                                 label="Asignar usuarios"
-                                items={users}
+                                items={usersList}
                                 selectedItems={selectedMembers}
                                 onUpdate={(options) => {
                                   const members: UserList[] = options.map((option) => {
@@ -544,6 +444,7 @@ const CreateMinistry = () => {
                                   sx={{ mt: 3, mb: 2 }}
                                   type="submit"
                                   startIcon={<SaveIcon />}
+                                  loading={loading}
                                 >
                                   Guardar
                                 </LoadingButton>
@@ -554,6 +455,7 @@ const CreateMinistry = () => {
                                   sx={{ mt: 3, mb: 2 }}
                                   type="submit"
                                   startIcon={<SaveIcon />}
+                                  loading={loading}
                                 >
                                   Crear
                                 </LoadingButton>
@@ -571,7 +473,7 @@ const CreateMinistry = () => {
                     <Typography variant="h5" component="h2" gutterBottom>
                       Grupos
                     </Typography>
-                    <ListGroup groups={ministryData.groups} onEdit={editGroup}/>
+                    <ListGroup groups={groups} onEdit={editGroup}/>
                   </MainCard>
               </Item>
             </Grid>
@@ -583,4 +485,4 @@ const CreateMinistry = () => {
   )
 }
 
-export default CreateMinistry
+export default Ministry

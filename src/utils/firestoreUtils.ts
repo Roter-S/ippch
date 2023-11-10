@@ -13,7 +13,9 @@ import {
   doc,
   addDoc
   , type DocumentData,
-  setDoc
+  setDoc,
+  orderBy,
+  limit
 } from 'firebase/firestore'
 import { ref, uploadString, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage'
 import { storage, db } from '../services/firebase'
@@ -71,12 +73,27 @@ export const createOrUpdateDocument = async <T>(collectionName: string, docId: s
   }
 }
 
-export const getCollection = async (collectionName: string, filters: QueryFilter[] = []) => {
+export const getCollection = async (collectionName: string, queryOptions: {
+  filters?: QueryFilter[]
+  orderBy?: Array<{ field: string, direction: 'asc' | 'desc' }>
+  limit?: number
+} = {}) => {
   const collectionRef = collection(db, collectionName)
   let queryRef: Query = collectionRef
+  if (queryOptions.filters != null) {
+    for (const filter of queryOptions.filters) {
+      queryRef = query(queryRef, where(filter[0], filter[1], filter[2]))
+    }
+  }
 
-  for (const filter of filters) {
-    queryRef = query(queryRef, where(filter[0], filter[1], filter[2]))
+  if (queryOptions.orderBy != null) {
+    for (const order of queryOptions.orderBy) {
+      queryRef = query(queryRef, orderBy(order.field, order.direction))
+    }
+  }
+
+  if (queryOptions.limit != null) {
+    queryRef = query(queryRef, limit(queryOptions.limit))
   }
 
   try {
@@ -153,6 +170,6 @@ export const getDocument = async (
   }
 }
 
-export const getRef = (collectionName: string, docId: string) => {
+export const getRef = async (collectionName: string, docId: string) => {
   return doc(db, collectionName, docId)
 }

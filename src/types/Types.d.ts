@@ -45,5 +45,6 @@ interface Advertisement {
   imagePath: string
   startDate: Timestamp
   endDate: Timestamp
+  type: string
 }
 export type { Setting, Ministries, Groups, User, DataDocument, Advertisement }

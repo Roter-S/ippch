@@ -3,40 +3,15 @@ import { Box, Grid, Tab, Typography } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import MainCard from '../../components/common/cards/MainCard'
 import ModalCreate from './ModalCreate'
-import AdGeneral from './AdGeneral'
+import AdCardList from './AdCardList'
 import { getAuth } from 'firebase/auth'
 import { getCollection, getDocument } from '../../utils/firestoreUtils'
-import { type Advertisement, type Groups, type Ministries, type User } from '../../types/Types'
-import { type Timestamp } from 'firebase/firestore'
+import { type Groups, type Ministries, type User } from '../../types/Types'
 import { useAlert } from '../../context/AlertContext'
-function formatFirebaseTimestamp (timestamp: Timestamp): string {
-  if (timestamp?.seconds != null && timestamp.nanoseconds != null) {
-    const date = new Date(timestamp.seconds * 1000)
-    return date.toLocaleString()
-  } else {
-    return 'Timestamp no válido'
-  }
-}
-
-function updateAdvertisementData (advertisementF: Advertisement, users: User[]): Advertisement {
-  const startDate = formatFirebaseTimestamp(advertisementF.startDate)
-  const endDate = formatFirebaseTimestamp(advertisementF.endDate)
-
-  const createdBy = users.find((user: User) => user.id === advertisementF.createdBy.id) as User
-
-  return {
-    ...advertisementF,
-    startDate,
-    endDate,
-    createdBy
-  }
-}
 
 function Advertisements () {
   const showAlert = useAlert()
-
   const [tab, setTab] = useState('1')
-  const [advertisements, setAdvertisements] = useState<Advertisement[]>([])
   const [user, setUser] = useState<User | undefined>()
   const [ministries, setMinistries] = useState<Ministries[] | undefined>()
   const [groups, setGroups] = useState<Groups[]>([])
@@ -51,22 +26,6 @@ function Advertisements () {
       }
     }
 
-    const fetchAdvertisements = async () => {
-      try {
-        const advertisements = (await getCollection('advertisements')) as Advertisement[]
-        const users: User[] = (await getCollection('users')) as User[]
-
-        const updatedAdvertisements = advertisements.map((advertisementF: Advertisement) => {
-          return updateAdvertisementData(advertisementF, users)
-        })
-
-        setAdvertisements(updatedAdvertisements)
-      } catch (error: Error | any) {
-        showAlert(error.toString(), 'error')
-        console.log(error)
-      }
-    }
-
     const fetchMinistries = async () => {
       const getMinistries = (await getCollection('ministries')) as Ministries[]
       setMinistries(getMinistries)
@@ -78,7 +37,6 @@ function Advertisements () {
     }
 
     void getUser()
-    void fetchAdvertisements()
     void fetchMinistries()
     void fetchGroups()
   }, [])
@@ -89,13 +47,6 @@ function Advertisements () {
 
   const updateFetchAd = async () => {
     try {
-      const advertisements = (await getCollection('advertisements')) as Advertisement[]
-      const users: User[] = (await getCollection('users')) as User[]
-      const updatedAdvertisements = advertisements.map((advertisementF: Advertisement) => {
-        return updateAdvertisementData(advertisementF, users)
-      })
-
-      setAdvertisements(updatedAdvertisements)
       showAlert('Anuncio creado', 'success')
     } catch (error: Error | any) {
       showAlert(error.toString(), 'error')
@@ -123,12 +74,16 @@ function Advertisements () {
           <TabPanel value="1">
             <Box sx={{ width: '100%' }}>
               <Grid>
-                <AdGeneral advertisements={advertisements} />
+                <AdCardList type='general' user={user}/>
               </Grid>
             </Box>
           </TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
+          <TabPanel value="2">
+            <AdCardList type='ministry' />
+          </TabPanel>
+          <TabPanel value="3">
+            <AdCardList type='group' />
+          </TabPanel>
         </TabContext>
       </MainCard>
     </>
