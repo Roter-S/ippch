@@ -1,5 +1,3 @@
-import { type DocumentReference } from 'firebase/firestore'
-
 interface DataDocument<T> {
   id: string
   data: T
@@ -15,7 +13,7 @@ interface Ministries {
   id: string
   name: string | null
   description: string
-  groups?: DocumentReference[] | Group[]
+  groups?: Group[]
 }
 
 interface User {
@@ -24,16 +22,31 @@ interface User {
   displayName: string
   photoURL: string
   roles: string[]
-  ministries: DocumentReference[] | Ministries[]
-  groups: DocumentReference[] | Groups[]
+  ministries: Ministries[]
+  groups: Groups[]
 }
 
 interface Groups {
   id: string
   name: string
   description: string
-  leaders: DocumentReference[] | User[]
-  members?: DocumentReference[] | User[]
+  ministry: Ministries
+  leaders: User[]
+  members?: User[]
 }
 
-export type { Setting, Ministries, Groups, User, DataDocument }
+interface Advertisement {
+  id: string
+  title: string
+  description: string
+  content: string
+  createdBy: User
+  image: string
+  imagePath: string
+  startDate: Timestamp
+  endDate: Timestamp
+  type: string
+  groups: Groups[]
+  ministries: Ministries[]
+}
+export type { Setting, Ministries, Groups, User, DataDocument, Advertisement }

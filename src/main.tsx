@@ -13,11 +13,12 @@ import '@fontsource/roboto/700.css'
 import './assets/css/Main.css'
 import { getCollection } from './utils/firestoreUtils'
 import { type Setting } from './types/Types'
+import { AlertProvider } from './context/AlertContext'
 
 const rootElement = document.getElementById('root')
 async function loadSettings () {
   try {
-    const setting: Setting[] = await getCollection('settings') as Setting[]
+    const setting: Setting[] = await getCollection('settings', { filters: [], orderBy: [], limit: 1 }) as Setting[]
     if (setting.length > 0) {
       document.title = setting[0].name
     }
@@ -34,7 +35,9 @@ if (rootElement !== null) {
     <React.StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <RouterProvider router={router} />
+          <AlertProvider>
+            <RouterProvider router={router} />
+          </AlertProvider>
       </ThemeProvider>
     </React.StrictMode>
   )
