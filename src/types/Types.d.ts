@@ -46,5 +46,7 @@ interface Advertisement {
   startDate: Timestamp
   endDate: Timestamp
   type: string
+  groups: Groups[]
+  ministries: Ministries[]
 }
 export type { Setting, Ministries, Groups, User, DataDocument, Advertisement }

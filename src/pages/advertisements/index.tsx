@@ -79,10 +79,10 @@ function Advertisements () {
             </Box>
           </TabPanel>
           <TabPanel value="2">
-            <AdCardList type='ministry' />
+            <AdCardList type='ministry' user={user}/>
           </TabPanel>
           <TabPanel value="3">
-            <AdCardList type='group' />
+            <AdCardList type='group' user={user}/>
           </TabPanel>
         </TabContext>
       </MainCard>

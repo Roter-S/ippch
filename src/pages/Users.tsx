@@ -14,45 +14,8 @@ export async function loader () {
   const groups: Groups[] = await getCollection('groups') as Groups[]
 
   users.forEach((user) => {
-    if (user.groups.length > 0) {
-      const resultGroups: Groups[] = []
-      user.groups.forEach((group) => {
-        const groupUpdate: Groups = groups.find((item) => item.id === group.id) as Groups
-        if (groupUpdate !== undefined) {
-          if (groupUpdate.leaders.length > 0) {
-            const resultLeader: User[] = []
-            groupUpdate.leaders.forEach((leader) => {
-              const leaderUpdate = users.find((user) => user.id === leader.id)
-              if (leaderUpdate !== undefined) {
-                resultLeader.push(leaderUpdate)
-              }
-            })
-            groupUpdate.leaders = resultLeader
-          }
-
-          if (groupUpdate.members !== undefined && groupUpdate.members.length > 0) {
-            const resultMembers: User[] = []
-            groupUpdate.members.forEach((member) => {
-              const memberUpdate = users.find((user) => user.id === member.id)
-              if (memberUpdate !== undefined) {
-                resultMembers.push(memberUpdate)
-              }
-            })
-            groupUpdate.members = resultMembers
-          }
-          resultGroups.push(groupUpdate)
-        }
-      })
-      user.groups = resultGroups
-      const resultMinistries: Ministries[] = []
-      user.ministries.forEach((ministry) => {
-        const ministryUpdate = ministries.find((item) => item.id === ministry.id)
-        if (ministryUpdate !== undefined) {
-          resultMinistries.push(ministryUpdate)
-        }
-      })
-      user.ministries = resultMinistries
-    }
+    user.ministries = ministries.filter((ministry) => user.ministries.some((ministry2) => ministry2.id === ministry.id))
+    user.groups = groups.filter((group) => user.groups.some((group2) => group2.id === group.id))
   })
   return users
 }
@@ -65,7 +28,7 @@ const Users = () => {
     if (dataLoader instanceof Array) {
       setUsers(dataLoader as User[])
     }
-  }, [])
+  }, [dataLoader])
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setUsers(users.filter((user) => user.id !== id))
@@ -84,7 +47,7 @@ const Users = () => {
       headerName: 'Roles',
       width: 250,
       renderCell: ({ value }) => {
-        if (Array.isArray(value) && value.length > 0) {
+        if (value.length > 0) {
           return (
             <List>
               {
@@ -106,7 +69,7 @@ const Users = () => {
       headerName: 'Ministerios',
       width: 250,
       renderCell: ({ value }) => {
-        if (Array.isArray(value) && value.length > 0) {
+        if (value.length > 0) {
           return (
             <List>
               {
@@ -126,24 +89,18 @@ const Users = () => {
     {
       field: 'groups',
       headerName: 'Grupo',
-      width: 100,
-      renderCell: ({ value }) => {
-        if (Array.isArray(value) && value.length > 0) {
-          return (
-            <List>
-              {
-                value.map((group: Groups) => (
-                  <ListItem disablePadding key={uuidv4()}>
-                    <ListItemText primary={group.name} />
-                  </ListItem>
-                ))
-              }
-            </List>
-          )
-        } else {
-          return <Typography key={uuidv4()} variant="body2">Sin asignación</Typography>
-        }
-      }
+      width: 200,
+      renderCell: ({ value }) => (
+        <List>
+          {
+            value.map((group: Groups) => (
+              <ListItem disablePadding key={uuidv4()}>
+                <ListItemText primary={group.name} />
+              </ListItem>
+            ))
+          }
+        </List>
+      )
     },
     {
       field: 'actions',
@@ -175,8 +132,9 @@ const Users = () => {
           '@media (max-width: 600px)': {
             width: 'calc(100vw - 95px)'
           },
-          height: 550
+          height: 650
         }}
+        getRowHeight={() => 'auto'}
         rows={users}
         columns={columns}
         slots={{ toolbar: GridToolbar }}
