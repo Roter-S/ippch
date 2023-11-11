@@ -47,7 +47,7 @@ const ListMinistries = () => {
         return [
           <GridActionsCellItem
             key={id}
-            icon={<PageviewIcon color='ochre' sx={{ fontSize: 30 }}/>}
+            icon={<PageviewIcon color='warning' sx={{ fontSize: 30 }}/>}
             label="Edit"
             className="textPrimary"
             onClick={() => { naigate(`${id}`) }}
