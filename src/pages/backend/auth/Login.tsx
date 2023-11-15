@@ -1,12 +1,12 @@
-import { useUserContext } from '../../context/UserContext'
+import { useUserContext } from '../../../context/UserContext'
 
 import {
   Avatar,
   Box, Card, CardContent, CardHeader
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
-import { useRedirectActiveUser } from '../../hooks/useRedirectActiveUser'
+import SignInWithGoogle from '../../../components/common/buttons/SignInWithGoogle'
+import { useRedirectActiveUser } from '../../../hooks/useRedirectActiveUser'
 
 export const Login = () => {
   const { user } = useUserContext()

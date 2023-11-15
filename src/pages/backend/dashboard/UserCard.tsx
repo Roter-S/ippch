@@ -1,4 +1,4 @@
-import DashboardOne from '../../components/common/cards/DashboardOne'
+import DashboardOne from '../../../components/common/cards/DashboardOne'
 import GroupIcon from '@mui/icons-material/Group'
 import { useTheme } from '@mui/material/styles'
 

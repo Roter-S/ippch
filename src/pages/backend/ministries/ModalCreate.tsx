@@ -9,7 +9,7 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { Grid, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { createDocument, updateDocument } from '../../utils/firestoreUtils'
+import { createDocument, updateDocument } from '../../../utils/firestoreUtils'
 
 const style = {
   position: 'absolute' as 'absolute',

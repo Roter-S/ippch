@@ -1,8 +1,8 @@
-import DashboardTwo from '../../components/common/cards/DashboardTwo'
+import DashboardTwo from '../../../components/common/cards/DashboardTwo'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import { useTheme } from '@mui/material/styles'
 
-const FamilyCard = () => {
+const CellCard = () => {
   const theme = useTheme()
 
   return <DashboardTwo
@@ -10,9 +10,9 @@ const FamilyCard = () => {
             icon={<FactCheckIcon sx={{ fontSize: 40 }}/>}
             value={250}
             title='Asistencia'
-            backgroundColor={theme.palette.violet.main}
-            background={theme.palette.violet.dark}
+            backgroundColor={theme.palette.success.main}
+            background={theme.palette.success.dark}
             />
 }
 
-export default FamilyCard
+export default CellCard

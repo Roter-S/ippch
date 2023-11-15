@@ -1,8 +1,8 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { register } from '../../services/firebase'
-import { useUserContext } from '../../context/UserContext'
-import { useRedirectActiveUser } from '../../hooks/useRedirectActiveUser'
+import { register } from '../../../services/firebase'
+import { useUserContext } from '../../../context/UserContext'
+import { useRedirectActiveUser } from '../../../hooks/useRedirectActiveUser'
 import { Link } from 'react-router-dom'
 
 import {
@@ -17,7 +17,7 @@ import {
 import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { LoadingButton } from '@mui/lab'
-import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
+import SignInWithGoogle from '../../../components/common/buttons/SignInWithGoogle'
 
 export const Register = () => {
   const { user } = useUserContext()

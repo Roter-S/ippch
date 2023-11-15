@@ -1,4 +1,4 @@
-import DashboardOne from '../../components/common/cards/DashboardOne'
+import DashboardOne from '../../../components/common/cards/DashboardOne'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import { useTheme } from '@mui/material/styles'
 

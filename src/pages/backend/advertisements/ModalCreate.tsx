@@ -10,10 +10,10 @@ import * as Yup from 'yup'
 import { Checkbox, FormControlLabel, FormGroup, Grid, TextField } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { v4 as uuidv4 } from 'uuid'
-import { createDocument, getRef, updateDocument, uploadFile } from '../../utils/firestoreUtils'
-import { type Groups, type Ministries, type User } from '../../types/Types'
+import { createDocument, getRef, updateDocument, uploadFile } from '../../../utils/firestoreUtils'
+import { type Groups, type Ministries, type User } from '../../../types/Types'
 import { DateTime } from 'luxon'
-import Item from '../../components/common/grid/Item'
+import Item from '../../../components/common/grid/Item'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -21,7 +21,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 500,
+  width: 450,
   boxShadow: 24,
   p: 4
 }
@@ -243,7 +243,7 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
                           </Item>
                         </Grid>
                         <Grid item xs={12}>
-                          <Item>
+                          <Item sx={{ overflow: 'scroll', height: '250px' }}>
                             {listSelects?.map((listSelect, index) => (
                               <FormGroup key={index}>
                                 <FormControlLabel

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { PieChart } from '@mui/x-charts/PieChart'
 import { useDrawingArea } from '@mui/x-charts/hooks'
 import { styled } from '@mui/material/styles'
-import MainCard from '../../components/common/cards/MainCard'
+import MainCard from '../../../components/common/cards/MainCard'
 import { Typography } from '@mui/material'
 
 const data = [

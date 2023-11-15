@@ -3,12 +3,12 @@ import { useLoaderData, useNavigate } from 'react-router-dom'
 import { Container, Divider, Grid, Typography } from '@mui/material'
 import PageviewIcon from '@mui/icons-material/Pageview'
 import { type GridRowId, type GridColDef, DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
-import AlertDelete from '../../components/common/AlertDelete'
+import AlertDelete from '../../../components/common/AlertDelete'
 import ModalCreate from './ModalCreate'
-import { getCollection } from '../../utils/firestoreUtils'
-import type { Ministries } from '../../types/Types'
-import MainCard from '../../components/common/cards/MainCard'
-import { useAlert } from '../../context/AlertContext'
+import { getCollection } from '../../../utils/firestoreUtils'
+import type { Ministries } from '../../../types/Types'
+import MainCard from '../../../components/common/cards/MainCard'
+import { useAlert } from '../../../context/AlertContext'
 
 export async function loader () {
   const ministries: Ministries[] = await getCollection('ministries') as Ministries[]

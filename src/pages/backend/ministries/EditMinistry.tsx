@@ -1,13 +1,13 @@
 import { Box, Grid, TextField, Typography } from '@mui/material'
-import MainCard from '../../components/common/cards/MainCard'
+import MainCard from '../../../components/common/cards/MainCard'
 import { Field, Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import Item from '../../components/common/grid/Item'
+import Item from '../../../components/common/grid/Item'
 import { LoadingButton } from '@mui/lab'
 import SaveIcon from '@mui/icons-material/Save'
-import { useAlert } from '../../context/AlertContext'
-import { updateDocument } from '../../utils/firestoreUtils'
-import { type Ministries } from '../../types/Types'
+import { useAlert } from '../../../context/AlertContext'
+import { updateDocument } from '../../../utils/firestoreUtils'
+import { type Ministries } from '../../../types/Types'
 
 export default function EditMinistry ({ ministry }: { ministry: Ministries }) {
   const showAlert = useAlert()

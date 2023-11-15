@@ -1,13 +1,13 @@
-import { type User, type Advertisement } from '../../types/Types'
-import AnnouncementCard from '../../components/common/cards/AnnouncementCard'
-import SkeletonAdvertisement from '../../components/common/skeleton/SkeletonAdvertisement'
+import { type User, type Advertisement } from '../../../types/Types'
+import AnnouncementCard from '../../../components/common/cards/AnnouncementCard'
+import SkeletonAdvertisement from '../../../components/common/skeleton/SkeletonAdvertisement'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid'
-import Item from '../../components/common/grid/Item'
+import Item from '../../../components/common/grid/Item'
 import { useEffect, useState } from 'react'
 import { type Timestamp } from 'firebase/firestore'
-import { getCollection } from '../../utils/firestoreUtils'
-import { useAlert } from '../../context/AlertContext'
+import { getCollection } from '../../../utils/firestoreUtils'
+import { useAlert } from '../../../context/AlertContext'
 
 function formatFirebaseTimestamp (timestamp: Timestamp): string {
   if (timestamp?.seconds != null && timestamp.nanoseconds != null) {

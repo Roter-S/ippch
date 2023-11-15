@@ -1,4 +1,4 @@
-import MainCard from '../../components/common/cards/MainCard'
+import MainCard from '../../../components/common/cards/MainCard'
 import { Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Typography, useTheme } from '@mui/material'
 import { LineChart } from '@mui/x-charts'
 

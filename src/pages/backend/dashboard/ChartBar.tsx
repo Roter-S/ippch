@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import MainCard from '../../components/common/cards/MainCard'
+import MainCard from '../../../components/common/cards/MainCard'
 import { BarChart } from '@mui/x-charts'
 
 export default function ChartBar () {

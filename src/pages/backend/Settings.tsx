@@ -1,13 +1,13 @@
 import { Typography, TextField, Divider, Alert } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import Grid from '@mui/material/Grid'
-import FirebaseFileUploader from '../components/common/inputs/FirebaseFileUploader'
+import FirebaseFileUploader from '../../components/common/inputs/FirebaseFileUploader'
 import { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { createDocument, createOrUpdateDocument, getCollection, uploadFileString } from '../utils/firestoreUtils'
-import MainCard from '../components/common/cards/MainCard'
-import { type Setting } from '../types/Types'
+import { createDocument, createOrUpdateDocument, getCollection, uploadFileString } from '../../utils/firestoreUtils'
+import MainCard from '../../components/common/cards/MainCard'
+import { type Setting } from '../../types/Types'
 
 export const Settings = () => {
   const [uploadedImages, setUploadedImages] = useState<string[]>([])

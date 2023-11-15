@@ -1,9 +1,9 @@
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { useEffect } from 'react'
-import { login } from '../../services/firebase'
+import { login } from '../../../services/firebase'
 import { Link, useNavigate } from 'react-router-dom'
-import { useUserContext } from '../../context/UserContext'
+import { useUserContext } from '../../../context/UserContext'
 
 import {
   Avatar,
@@ -17,7 +17,7 @@ import {
 import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { LoadingButton } from '@mui/lab'
-import SignInWithGoogle from '../../components/common/buttons/SignInWithGoogle'
+import SignInWithGoogle from '../../../components/common/buttons/SignInWithGoogle'
 
 export const Login = () => {
   const navigate = useNavigate()

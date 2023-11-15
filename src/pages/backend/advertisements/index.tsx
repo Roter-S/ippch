@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Grid, Tab, Typography } from '@mui/material'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import MainCard from '../../components/common/cards/MainCard'
+import MainCard from '../../../components/common/cards/MainCard'
 import ModalCreate from './ModalCreate'
 import AdCardList from './AdCardList'
 import { getAuth } from 'firebase/auth'
-import { getCollection, getDocument } from '../../utils/firestoreUtils'
-import { type Groups, type Ministries, type User } from '../../types/Types'
-import { useAlert } from '../../context/AlertContext'
+import { getCollection, getDocument } from '../../../utils/firestoreUtils'
+import { type Groups, type Ministries, type User } from '../../../types/Types'
+import { useAlert } from '../../../context/AlertContext'
 
 function Advertisements () {
   const showAlert = useAlert()

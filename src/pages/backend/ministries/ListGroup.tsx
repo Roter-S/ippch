@@ -3,7 +3,7 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useState } from 'react'
-import { type Groups } from '../../types/Types'
+import { type Groups } from '../../../types/Types'
 
 interface SelectedListItemProps {
   groups: Groups[] | undefined

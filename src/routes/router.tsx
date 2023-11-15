@@ -2,14 +2,26 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import RootLayout from '../components/layouts/RootLayout'
 import PrivateLayout from '../components/layouts/PrivateLayout'
-import Dashboard from '../pages/dashboard'
-import Users, { loader as LoaderUsers } from '../pages/Users'
-import IndexMinistries from '../pages/ministries/index'
-import ListMinistries, { loader as LoaderListMinistries } from '../pages/ministries/ListMinistries'
-import Ministry from '../pages/ministries/Ministry'
-import Advertisements from '../pages/advertisements'
+import Dashboard from '../pages/backend/dashboard'
+import Users, { loader as LoaderUsers } from '../pages/backend/Users'
+import IndexMinistries from '../pages/backend/ministries/index'
+import ListMinistries, { loader as LoaderListMinistries } from '../pages/backend/ministries/ListMinistries'
+import Ministry from '../pages/backend/ministries/Ministry'
+import Advertisements from '../pages/backend/advertisements'
+import WebPageLayout from '../components/layouts/WebPageLayout'
+import PageUnderConstruction from '../components/common/PageUnderConstruction'
 
 export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <WebPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <PageUnderConstruction />
+      }
+    ]
+  },
   {
     path: '/admin',
     element: <RootLayout />,
@@ -17,7 +29,7 @@ export const router = createBrowserRouter([
       {
         index: true,
         async lazy () {
-          const { Login } = await import('../pages/auth/Login')
+          const { Login } = await import('../pages/backend/auth/Login')
           return { Component: Login }
         }
       },
@@ -46,7 +58,7 @@ export const router = createBrowserRouter([
               {
                 path: ':ministryId',
                 async loader ({ params }: any) {
-                  const { loader } = await import('../pages/ministries/Ministry')
+                  const { loader } = await import('../pages/backend/ministries/Ministry')
                   return await loader({ params })
                 },
                 element: <Ministry />
@@ -56,7 +68,7 @@ export const router = createBrowserRouter([
           {
             path: 'settings',
             async lazy () {
-              const { Settings } = await import('../pages/Settings')
+              const { Settings } = await import('../pages/backend/Settings')
               return { Component: Settings }
             }
           },
