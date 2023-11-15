@@ -24,12 +24,11 @@ function updateAdvertisementData (advertisement: Advertisement, users: User[]): 
 
   const createdBy = users.find((user: User) => user.id === advertisement.createdBy.id) as User
 
-  return {
-    ...advertisement,
-    startDate,
-    endDate,
-    createdBy
-  }
+  advertisement.startDate = startDate
+  advertisement.endDate = endDate
+  advertisement.createdBy = createdBy
+
+  return advertisement
 }
 
 export default function AdCardList ({ type, user }: { type: string, user: User | undefined }) {
