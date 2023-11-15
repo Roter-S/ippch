@@ -49,7 +49,7 @@ function Advertisements () {
     try {
       showAlert('Anuncio creado', 'success')
     } catch (error: Error | any) {
-      showAlert(error.toString(), 'error')
+      showAlert(error.message, 'error')
     }
   }
 

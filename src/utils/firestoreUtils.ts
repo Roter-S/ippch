@@ -173,3 +173,15 @@ export const getDocument = async (
 export const getRef = async (collectionName: string, docId: string) => {
   return doc(db, collectionName, docId)
 }
+
+export const getDocumentCount = async (collectionName: string): Promise<number> => {
+  const collectionRef = collection(db, collectionName)
+
+  try {
+    const querySnapshot: QuerySnapshot = await getDocs(collectionRef)
+    return querySnapshot.size
+  } catch (error) {
+    console.error('Error counting documents:', error)
+    throw error
+  }
+}
