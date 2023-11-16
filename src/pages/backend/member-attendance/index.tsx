@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom'
 
-const IndexAssists = () => {
+const MemberAttendance = () => {
   return (
     <Outlet />
   )
 }
 
-export default IndexAssists
+export default MemberAttendance

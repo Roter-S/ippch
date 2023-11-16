@@ -1,4 +1,4 @@
-import { type User, type Assists } from '../../../types/Types'
+import { type User, type MemberAttendance } from '../../../types/Types'
 import { getCollection, getDocument } from '../../../utils/firestoreUtils'
 import { useAlert } from '../../../context/AlertContext'
 import { useEffect, useState } from 'react'
@@ -12,14 +12,14 @@ import AlertDelete from '../../../components/common/AlertDelete'
 const ListAssists = () => {
   const showAlert = useAlert()
   const navigate = useNavigate()
-  const [assists, setAssists] = useState<Assists[]>([])
+  const [memberAttendance, setMemberAttendance] = useState<MemberAttendance[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getAssists = async () => {
       try {
-        const assistsCollect: Assists[] = await getCollection('assists', { orderBy: [{ field: 'createdAt', direction: 'desc' }] }) as Assists[]
-        setAssists(assistsCollect)
+        const assistsCollect: MemberAttendance[] = await getCollection('memberAttendance', { orderBy: [{ field: 'createdAt', direction: 'desc' }] }) as MemberAttendance[]
+        setMemberAttendance(assistsCollect)
         setLoading(false)
       } catch (error: Error | any) {
         showAlert(error.message, 'error')
@@ -48,7 +48,7 @@ const ListAssists = () => {
         )
       }
     },
-    { field: 'assistCount', headerName: 'Total de asistencia', width: 150 },
+    { field: 'memberAttendanceCount', headerName: 'Total de asistencia', width: 150 },
     {
       field: 'createdAt',
       headerName: 'Fecha',
@@ -87,7 +87,7 @@ const ListAssists = () => {
           <AlertDelete
             key={id}
             id={String(id)}
-            collectionName={String('assists')}
+            collectionName={String('memberAttendance')}
             onUpdate={handleDeleteClick(String(id))}
           />
         ]
@@ -96,7 +96,7 @@ const ListAssists = () => {
   ]
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setAssists(assists.filter((attendance) => attendance.id !== id))
+    setMemberAttendance(memberAttendance.filter((attendance) => attendance.id !== id))
   }
 
   return (
@@ -126,7 +126,7 @@ const ListAssists = () => {
                   </Box>
                   )
                 : (
-                    assists.length > 0
+                    memberAttendance.length > 0
                       ? (
                         <DataGrid
                           sx={{
@@ -136,7 +136,7 @@ const ListAssists = () => {
                             },
                             height: 550
                           }}
-                          rows={assists}
+                          rows={memberAttendance}
                           columns={columns}
                           slots={{ toolbar: GridToolbar }}
                           slotProps={{

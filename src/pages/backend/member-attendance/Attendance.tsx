@@ -12,11 +12,11 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import { auth } from '../../../services/firebase'
 import { createDocument, getDocument, getRef, updateDocument } from '../../../utils/firestoreUtils'
 import { useAlert } from '../../../context/AlertContext'
-import { type Assists } from '../../../types/Types'
+import { type MemberAttendance } from '../../../types/Types'
 import { useState } from 'react'
 
 export async function loader ({ params }: { params: { attendanceId: string } }) {
-  const attendance = await getDocument('assists', params.attendanceId)
+  const attendance = await getDocument('memberAttendance', params.attendanceId)
   if (attendance === null) {
     return undefined
   }
@@ -24,41 +24,33 @@ export async function loader ({ params }: { params: { attendanceId: string } }) 
 }
 
 const Attendance = () => {
-  const attendanceLoad = useLoaderData() as Assists | undefined
-  const [attendance, setAttendance] = useState<Assists | undefined>()
+  const attendanceLoad = useLoaderData() as MemberAttendance | undefined
   const showAlert = useAlert()
   const navigate = useNavigate()
   const user = auth.currentUser
   const AttendanceSchema = Yup.object({
     createdAt: Yup.date().required('Campo requerido'),
-    assistCount: Yup.number().min(1, 'Contador asistencia debe ser mayor o igual a 1.').required('Campo requerido')
+    memberAttendanceCount: Yup.number().min(1, 'Contador asistencia debe ser mayor o igual a 1.').required('Campo requerido')
   })
 
   const handleSubmitAttendance = async (value: any, formik: any) => {
-    const { createdAt, assistCount } = value
+    const { createdAt, memberAttendanceCount } = value
     if (user !== null) {
       const data = {
         createdAt: new Date(createdAt),
-        assistCount: parseInt(assistCount),
+        memberAttendanceCount: parseInt(memberAttendanceCount),
         attendanceTaker: await getRef('users', user.uid)
       }
 
       if (attendanceLoad !== undefined) {
-        await updateDocument('assists', attendanceLoad.id, data)
+        await updateDocument('memberAttendance', attendanceLoad.id, data)
         showAlert('Asistencia actualizada correctamente.', 'success')
-        const setAttendanceDoc = await getDocument('assists', attendanceLoad.id) as Assists
-        if (setAttendanceDoc !== null) {
-          setAttendance(setAttendanceDoc)
-        }
       } else {
-        const attendanceRef = await createDocument('assists', data)
-        await updateDocument('assists', attendanceRef.id, { id: attendanceRef.id })
+        const attendanceRef = await createDocument('memberAttendance', data)
+        await updateDocument('memberAttendance', attendanceRef.id, { id: attendanceRef.id })
         showAlert('Asistencia creada correctamente.', 'success')
+        formik.resetForm({ createdAt: formatDateTimeFormik(new Date()), memberAttendanceCount: 0 })
       }
-      formik.resetForm({
-        createdAt: (attendance !== undefined) ? formatDateTimeFormik(attendance.createdAt.toDate()) : formatDateTimeFormik(new Date()),
-        assistCount: (attendance !== undefined) ? attendance.assistCount : 0
-      })
     } else {
       showAlert('Debes iniciar sesión para crear una asistencia.', 'error')
     }
@@ -66,13 +58,13 @@ const Attendance = () => {
 
   return (
     <MainCard>
-        <Link onClick={() => { navigate('/admin/assists') }} variant="h5" underline="none">
+        <Link onClick={() => { navigate('/admin/member-attendance') }} variant="h5" underline="none">
           <ArrowBackIcon /> { attendanceLoad !== undefined ? 'Editar Asistencia' : 'Crear Asistencia'}
         </Link>
         <Formik
            initialValues={{
              createdAt: (attendanceLoad !== undefined) ? formatDateTimeFormik(attendanceLoad.createdAt.toDate()) : formatDateTimeFormik(new Date()),
-             assistCount: (attendanceLoad !== undefined) ? attendanceLoad.assistCount : 0
+             memberAttendanceCount: (attendanceLoad !== undefined) ? attendanceLoad.memberAttendanceCount : 0
            }}
           validationSchema={AttendanceSchema}
           onSubmit={handleSubmitAttendance}
@@ -94,7 +86,7 @@ const Attendance = () => {
                     <Grid item xs={3} sm={4}>
                       <Button
                         variant="contained"
-                        onClick={async () => await setFieldValue('assistCount', Math.max(0, values.assistCount - 1))}
+                        onClick={async () => await setFieldValue('memberAttendanceCount', Math.max(0, values.memberAttendanceCount - 1))}
                       >
                         <PersonRemoveIcon />
                       </Button>
@@ -103,20 +95,20 @@ const Attendance = () => {
                       <Field
                         as={TextField}
                         type="number"
-                        name="assistCount"
+                        name="memberAttendanceCount"
                         label="Contador de Asistencias"
                         margin="normal"
                         InputProps={{
                           inputProps: { min: 0 }
                         }}
-                        error={Boolean(errors?.assistCount)}
-                        helperText={errors?.assistCount}
+                        error={Boolean(errors?.memberAttendanceCount)}
+                        helperText={errors?.memberAttendanceCount}
                       />
                     </Grid>
                     <Grid item xs={3} sm={4}>
                       <Button
                         variant="contained"
-                        onClick={async () => await setFieldValue('assistCount', values.assistCount + 1)}
+                        onClick={async () => await setFieldValue('memberAttendanceCount', values.memberAttendanceCount + 1)}
                       >
                         <GroupAddIcon />
                       </Button>

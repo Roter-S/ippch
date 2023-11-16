@@ -84,7 +84,7 @@ const RoutesDrawer = () => {
           {
             title: 'Asistencias',
             icon: <ChecklistRtlIcon />,
-            to: '/admin/assists'
+            to: '/admin/member-attendance'
           },
           {
             title: 'Donaciones',

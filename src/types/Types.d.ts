@@ -50,10 +50,10 @@ interface Advertisement {
   ministries: Ministries[]
 }
 
-interface Assists {
+interface MemberAttendance {
   id: string
-  assistCount: number
+  memberAttendanceCount: number
   attendanceTaker: User
   createdAt: Timestamp
 }
-export type { Setting, Ministries, Groups, User, DataDocument, Advertisement, Assists }
+export type { Setting, Ministries, Groups, User, DataDocument, Advertisement, MemberAttendance }

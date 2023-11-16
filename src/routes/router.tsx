@@ -10,10 +10,10 @@ import Ministry from '../pages/backend/ministries/Ministry'
 import Advertisements from '../pages/backend/advertisements'
 import WebPageLayout from '../components/layouts/WebPageLayout'
 import PageUnderConstruction from '../components/common/PageUnderConstruction'
-import IndexAssists from '../pages/backend/assists'
-import ListAssists from '../pages/backend/assists/ListAssists'
+import MemberAttendance from '../pages/backend/member-attendance'
+import ListAssists from '../pages/backend/member-attendance/ListMemberAttendance'
 import Error404 from '../components/common/errors/Error404'
-import Attendance from '../pages/backend/assists/Attendance'
+import Attendance from '../pages/backend/member-attendance/Attendance'
 
 export const router = createBrowserRouter([
   {
@@ -81,8 +81,8 @@ export const router = createBrowserRouter([
             element: <Advertisements/>
           },
           {
-            path: 'assists',
-            element: <IndexAssists />,
+            path: 'member-attendance',
+            element: <MemberAttendance />,
             children: [
               {
                 index: true,
@@ -95,7 +95,7 @@ export const router = createBrowserRouter([
               {
                 path: ':attendanceId',
                 async loader ({ params }: any) {
-                  const { loader } = await import('../pages/backend/assists/Attendance')
+                  const { loader } = await import('../pages/backend/member-attendance/Attendance')
                   return await loader({ params })
                 },
                 element: <Attendance />
