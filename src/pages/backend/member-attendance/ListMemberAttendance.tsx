@@ -126,31 +126,23 @@ const ListAssists = () => {
                   </Box>
                   )
                 : (
-                    memberAttendance.length > 0
-                      ? (
-                        <DataGrid
-                          sx={{
-                            border: 'none',
-                            '@media (max-width: 600px)': {
-                              width: 'calc(100vw - 120px)'
-                            },
-                            height: 550
-                          }}
-                          rows={memberAttendance}
-                          columns={columns}
-                          slots={{ toolbar: GridToolbar }}
-                          slotProps={{
-                            toolbar: {
-                              showQuickFilter: true
-                            }
-                          }}
-                        />
-                        )
-                      : (
-                        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'center' }}>
-                          <Typography variant='body2'>No hay asistencias registradas</Typography>
-                        </Box>
-                        )
+                  <DataGrid
+                    sx={{
+                      border: 'none',
+                      '@media (max-width: 600px)': {
+                        width: 'calc(100vw - 120px)'
+                      },
+                      height: 550
+                    }}
+                    rows={memberAttendance}
+                    columns={columns}
+                    slots={{ toolbar: GridToolbar }}
+                    slotProps={{
+                      toolbar: {
+                        showQuickFilter: true
+                      }
+                    }}
+                  />
                   )
             }
           </Grid>
