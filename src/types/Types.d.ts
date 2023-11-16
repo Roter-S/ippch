@@ -51,6 +51,7 @@ interface Advertisement {
 }
 
 interface Assists {
+  id: string
   assistCount: number
   attendanceTaker: User
   createdAt: Timestamp

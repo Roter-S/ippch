@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom'
 
-const IndexMinistries = () => {
+const IndexAssists = () => {
   return (
     <Outlet />
   )
 }
 
-export default IndexMinistries
+export default IndexAssists

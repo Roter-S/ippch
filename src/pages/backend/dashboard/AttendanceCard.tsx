@@ -45,7 +45,7 @@ const AttendanceCard = () => {
             isLoading={loading}
             icon={<FactCheckIcon sx={{ fontSize: 50 }}/>}
             value={assistCount}
-            title='Total de Asistencias del Mes'
+            title='Asistencias del Mes'
             backgroundColor={theme.palette.secondary.main}
             background={theme.palette.secondary.dark}
             />

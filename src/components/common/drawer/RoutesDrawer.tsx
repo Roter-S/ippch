@@ -15,6 +15,8 @@ import { type Setting } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl'
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism'
 
 const RoutesDrawer = () => {
   const location = useLocation()
@@ -78,6 +80,16 @@ const RoutesDrawer = () => {
             title: 'Noticicias',
             icon: <NewspaperIcon />,
             to: '/admin/advertisements'
+          },
+          {
+            title: 'Asistencias',
+            icon: <ChecklistRtlIcon />,
+            to: '/admin/assists'
+          },
+          {
+            title: 'Donaciones',
+            icon: <VolunteerActivismIcon />,
+            to: '/admin/donations'
           }
         ].map((text, index) => (
           <ListItem

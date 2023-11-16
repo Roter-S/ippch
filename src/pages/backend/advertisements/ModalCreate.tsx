@@ -12,8 +12,8 @@ import { LoadingButton } from '@mui/lab'
 import { v4 as uuidv4 } from 'uuid'
 import { createDocument, getRef, updateDocument, uploadFile } from '../../../utils/firestoreUtils'
 import { type Groups, type Ministries, type User } from '../../../types/Types'
-import { DateTime } from 'luxon'
 import Item from '../../../components/common/grid/Item'
+import { formatDateTimeFormik } from '../../../utils/formattingUtils'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -40,8 +40,6 @@ interface ListSelect {
 
 const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, groups }) => {
   const [openModal, setOpenModal] = React.useState(false)
-  const currentDate = DateTime.now().setLocale('es-ES')
-  const formattedDate = currentDate.toFormat("yyyy-MM-dd'T'HH:mm")
   const [listSelects, setListSelects] = React.useState<ListSelect[]>([])
 
   React.useEffect(() => {
@@ -142,8 +140,8 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
                 title: '',
                 description: '',
                 content: '',
-                startDate: formattedDate,
-                endDate: new Date().toISOString().slice(0, 16),
+                startDate: formatDateTimeFormik(new Date()),
+                endDate: formatDateTimeFormik(new Date()),
                 image: null,
                 ministries: [],
                 groups: []

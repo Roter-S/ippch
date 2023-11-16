@@ -8,8 +8,10 @@ import * as Yup from 'yup'
 import { createDocument, createOrUpdateDocument, getCollection, uploadFileString } from '../../utils/firestoreUtils'
 import MainCard from '../../components/common/cards/MainCard'
 import { type Setting } from '../../types/Types'
+import { useAlert } from '../../context/AlertContext'
 
 export const Settings = () => {
+  const showAlert = useAlert()
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
   const handleImagesUploaded = (imageUrls: string[]) => {
@@ -38,7 +40,8 @@ export const Settings = () => {
       }
       resetForm()
       window.location.reload()
-    } catch (error) {
+    } catch (error: Error | any) {
+      showAlert(error.message, 'error')
       console.log(error)
     } finally {
       setSubmitting(false)

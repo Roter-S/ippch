@@ -18,7 +18,7 @@ export async function loader () {
 const ListMinistries = () => {
   const showAlert = useAlert()
   const [ministries, setMinistries] = useState<Ministries[]>([])
-  const naigate = useNavigate()
+  const navigate = useNavigate()
   const dataLoader = useLoaderData()
   useEffect(() => {
     if (dataLoader instanceof Array) {
@@ -50,7 +50,7 @@ const ListMinistries = () => {
             icon={<PageviewIcon color='warning' sx={{ fontSize: 30 }}/>}
             label="Edit"
             className="textPrimary"
-            onClick={() => { naigate(`${id}`) }}
+            onClick={() => { navigate(`${id}`) }}
             color="inherit"
           />,
           <AlertDelete
