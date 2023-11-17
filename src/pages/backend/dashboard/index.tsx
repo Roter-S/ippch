@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid'
-import ChartPie from './ChartPie'
+/* import ChartPie from './ChartPie'
 import ChartBar from './ChartBar'
-import ChartArea from './ChartArea'
+import ChartArea from './ChartArea' */
 import UserCard from './UserCard'
 import AttendanceCard from './AttendanceCard'
 import FamilyCard from './FamilyCard'
@@ -28,7 +28,7 @@ const Dashboard = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item lg={6} xs={12}>
+          {/* <Grid item lg={6} xs={12}>
             <ChartBar />
           </Grid>
           <Grid item lg={3} xs={12}>
@@ -36,7 +36,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item lg={3} xs={12}>
             <ChartArea />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </Grid>
