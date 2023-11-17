@@ -5,10 +5,11 @@ import PageviewIcon from '@mui/icons-material/Pageview'
 import { type GridRowId, type GridColDef, DataGrid, GridToolbar, GridActionsCellItem } from '@mui/x-data-grid'
 import AlertDelete from '../../../components/common/AlertDelete'
 import ModalCreate from './ModalCreate'
-import { getCollection } from '../../../utils/firestoreUtils'
-import type { Ministries } from '../../../types/Types'
+import { getCollection, getDocument } from '../../../utils/firestoreUtils'
+import type { Ministries, User } from '../../../types/Types'
 import MainCard from '../../../components/common/cards/MainCard'
 import { useAlert } from '../../../context/AlertContext'
+import { getAuth } from 'firebase/auth'
 
 export async function loader () {
   const ministries: Ministries[] = await getCollection('ministries') as Ministries[]
@@ -18,12 +19,21 @@ export async function loader () {
 const ListMinistries = () => {
   const showAlert = useAlert()
   const [ministries, setMinistries] = useState<Ministries[]>([])
+  const [user, setUser] = useState<User | undefined>()
   const navigate = useNavigate()
   const dataLoader = useLoaderData()
   useEffect(() => {
+    const auth = getAuth()
+    const getUser = async () => {
+      if (auth.currentUser != null) {
+        const userDoc = await getDocument('users', auth.currentUser.uid)
+        setUser(userDoc as User)
+      }
+    }
     if (dataLoader instanceof Array) {
       setMinistries(dataLoader as Ministries[])
     }
+    void getUser()
   }, [])
 
   const updateFetchMinistries = async () => {
@@ -74,10 +84,16 @@ const ListMinistries = () => {
             </Typography>
           </Grid>
           <Grid>
-            <ModalCreate returnResponse={(message, type) => {
-              showAlert(message, type)
-              void updateFetchMinistries()
-            }}/>
+            {
+               (user != null) && user.roles.some(role => role === 'admin')
+                 ? (
+                  <ModalCreate returnResponse={(message, type) => {
+                    showAlert(message, type)
+                    void updateFetchMinistries()
+                  }}/>
+                   )
+                 : null
+            }
           </Grid>
         </Grid>
         <Divider />

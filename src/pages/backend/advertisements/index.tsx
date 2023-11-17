@@ -58,10 +58,16 @@ function Advertisements () {
       <MainCard>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant='h4'>Anuncios</Typography>
-          <ModalCreate user={user} ministries={ministries} groups={groups} returnResponse={(message, type) => {
-            showAlert(message, type)
-            void updateFetchAd()
-          }} />
+          {
+            (user != null) && user.roles.some(role => role === 'admin' || role === 'leader')
+              ? (
+                <ModalCreate user={user} ministries={ministries} groups={groups} returnResponse={(message, type) => {
+                  showAlert(message, type)
+                  void updateFetchAd()
+                }} />
+                )
+              : null
+          }
         </Box>
         <TabContext value={tab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

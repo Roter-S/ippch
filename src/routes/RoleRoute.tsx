@@ -11,7 +11,10 @@ const RoleRoute: React.FC<RoleRouteProps> = ({ allowedRoles, element }) => {
   const { user } = useUserContext()
 
   const isAuthorized = user !== false && allowedRoles.some(role => user.roles.includes(role))
-
+  const emptyRoles = user !== false && user.roles.length === 0
+  if (emptyRoles) {
+    return <Navigate to="/admin/home" />
+  }
   return isAuthorized ? element : <Navigate to="/404" />
 }
 

@@ -16,7 +16,6 @@ import SkeletonNameApp from '../skeleton/SkeletonNameApp'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl'
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism'
 import { useUserContext } from '../../../context/UserContext'
 
 interface Route {
@@ -74,11 +73,6 @@ const RoutesDrawer = () => {
               title: 'Asistencias',
               icon: <ChecklistRtlIcon />,
               to: '/admin/member-attendance'
-            },
-            {
-              title: 'Donaciones',
-              icon: <VolunteerActivismIcon />,
-              to: '/admin/donations'
             }
           ])
           break

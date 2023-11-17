@@ -98,7 +98,7 @@ export const router = createBrowserRouter([
             path: 'advertisements',
             element: (
               <RoleRoute
-                allowedRoles={['admin', 'leader', 'member']}
+                allowedRoles={['admin', 'leader', 'member', 'attendance']}
                 element={<Advertisements />}
               />
             )
@@ -132,12 +132,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'home',
-            element: (
-              <RoleRoute
-                allowedRoles={['admin', 'leader', 'member']}
-                element={<Welcome />}
-              />
-            )
+            element: <Welcome />
           }
         ]
       }
