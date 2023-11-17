@@ -91,8 +91,21 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
       if (user != null) {
         const image = await uploadFile(values.image, `advertisements/${uuidv4()}`)
         const userRef = await getRef('users', user.id)
-        const ministriesRef = values.ministries.map(async (ministryId: string) => ministryId != null ? await getRef('ministries', ministryId) : null).filter((ministry: any) => ministry != null)
-        const groupsRef = values.groups.map(async (groupId: string) => groupId != null ? await getRef('groups', groupId) : null).filter((group: any) => group != null)
+        const ministriesRef = await Promise.all(
+          values.ministries.map(async (ministryId: string) => {
+            return ministryId != null ? await getRef('ministries', ministryId) : null
+          })
+        )
+
+        const groupsRef = await Promise.all(
+          values.groups.map(async (groupId: string) => {
+            return groupId != null ? await getRef('groups', groupId) : null
+          })
+        )
+
+        const filteredMinistriesRef = ministriesRef.filter(ref => ref !== null)
+        const filteredGroupsRef = groupsRef.filter(ref => ref !== null)
+
         const data = {
           title: values.title,
           description: values.description,
@@ -101,17 +114,17 @@ const ModalCreate: React.FC<ModalProps> = ({ returnResponse, user, ministries, g
           imagePath: image.path,
           createdBy: userRef,
           seen: false,
-          startDate: new Date(values.startDate),
-          endDate: new Date(values.endDate),
-          ministries: ministriesRef,
-          groups: groupsRef,
+          startDate: new Date(values.startDate).toISOString(),
+          endDate: new Date(values.endDate).toISOString(),
+          ministries: filteredMinistriesRef,
+          groups: filteredGroupsRef,
           type: groupsRef.length > 0 ? 'group' : ministriesRef.length > 0 ? 'ministry' : 'general'
         }
 
         const ad = await createDocument('advertisements', data)
         await updateDocument('advertisements', ad.id, { id: ad.id })
-        setOpenModal(false)
-        returnResponse('Anuncio creado correctamente', 'success')
+        // setOpenModal(false)
+        // returnResponse('Anuncio creado correctamente', 'success')
       } else {
         setOpenModal(false)
         returnResponse('No se encontro una sesión activa', 'error')
