@@ -8,9 +8,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import SignInWithGoogle from '../../../components/common/buttons/SignInWithGoogle'
 import { useRedirectActiveUser } from '../../../hooks/useRedirectActiveUser'
 
-export const Login = () => {
+const Login = () => {
   const { user } = useUserContext()
-  useRedirectActiveUser(user, '/admin/dashboard')
+  useRedirectActiveUser(user)
 
   return (
     <Box
@@ -45,3 +45,5 @@ export const Login = () => {
     </Box>
   )
 }
+
+export default Login

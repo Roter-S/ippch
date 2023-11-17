@@ -56,7 +56,7 @@ const PrivateLayout: React.FC<Props> = (props) => {
     </Box>
       )
     : (
-    <Navigate to="/" />
+      <Navigate to="/" />
       )
 }
 

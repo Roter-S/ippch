@@ -8,11 +8,13 @@ import {
 import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth'
 import { auth } from '../services/firebase'
 import Loader from '../components/common/Loader'
+import { getDocument } from '../utils/firestoreUtils'
 
 interface User {
   id: string
   email: string | null
   photoURL: string | null
+  roles: string[] | null
 }
 
 interface UserContextType {
@@ -33,8 +35,14 @@ export default function UserContextProvider ({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser: FirebaseUser | null) => {
-        setUser((firebaseUser != null) ? mapFirebaseUser(firebaseUser) : false)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      async (firebaseUser) => {
+        if (firebaseUser != null) {
+          const user = await mapFirebaseUser(firebaseUser)
+          setUser(user)
+        } else {
+          setUser(false)
+        }
       }
     )
 
@@ -63,10 +71,15 @@ export const useUserContext = () => {
 }
 
 // Helper function to map Firebase user to your user type
-function mapFirebaseUser (firebaseUser: FirebaseUser): User {
+async function mapFirebaseUser (firebaseUser: FirebaseUser): Promise<User> {
+  const userData = await getDocument('users', firebaseUser.uid)
+
+  const roles = userData?.roles ?? []
+
   return {
     id: firebaseUser.uid,
     email: firebaseUser.email,
-    photoURL: firebaseUser.photoURL
+    photoURL: firebaseUser.photoURL,
+    roles
   }
 }

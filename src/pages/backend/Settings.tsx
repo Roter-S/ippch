@@ -10,7 +10,7 @@ import MainCard from '../../components/common/cards/MainCard'
 import { type Setting } from '../../types/Types'
 import { useAlert } from '../../context/AlertContext'
 
-export const Settings = () => {
+const Settings = () => {
   const showAlert = useAlert()
   const [uploadedImages, setUploadedImages] = useState<string[]>([])
 
@@ -126,3 +126,5 @@ export const Settings = () => {
     </MainCard>
   )
 }
+
+export default Settings
