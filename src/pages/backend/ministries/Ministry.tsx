@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useState } from 'react'
+import { type SyntheticEvent, useState, useEffect } from 'react'
 import {
   Box,
   FormHelperText,
@@ -21,6 +21,7 @@ import { type Groups, type Ministries, type User } from '../../../types/Types'
 
 import { useAlert } from '../../../context/AlertContext'
 import EditMinistry from './EditMinistry'
+import { getAuth } from 'firebase/auth'
 
 export async function loader ({ params }: { params: { ministryId: string } }) {
   const users = (await getCollection('users'))
@@ -97,6 +98,18 @@ const Ministry = () => {
     id: user.id,
     name: user.displayName
   }))
+  const [user, setUser] = useState<User | undefined>()
+
+  useEffect(() => {
+    const auth = getAuth()
+    const getUser = async () => {
+      if (auth.currentUser != null) {
+        const userDoc = await getDocument('users', auth.currentUser.uid)
+        setUser(userDoc as User)
+      }
+    }
+    void getUser()
+  }, [])
 
   const handleChange = (_event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
@@ -350,13 +363,23 @@ const Ministry = () => {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'center' }}>
           <TabList onChange={handleChange}>
-            <Tab label={ministry.name} value="1" />
+            {
+              (user != null) && user.roles.some(role => role === 'admin')
+                ? <Tab label={ministry.name} value="1" />
+                : null
+            }
             <Tab label="Grupos" value="2" />
           </TabList>
         </Box>
-        <TabPanel value="1">
-          <EditMinistry ministry={ministry} />
-        </TabPanel>
+        {
+          (user != null) && user.roles.some(role => role === 'admin')
+            ? (
+            <TabPanel value="1">
+              <EditMinistry ministry={ministry} />
+            </TabPanel>
+              )
+            : null
+        }
 
         <TabPanel value="2">
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
