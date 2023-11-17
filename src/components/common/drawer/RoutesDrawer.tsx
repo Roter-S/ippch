@@ -125,7 +125,7 @@ const RoutesDrawer = () => {
     return routes
   }
 
-  const userRoutes = generateRoutesBasedOnRoles(user.roles)
+  const userRoutes = generateRoutesBasedOnRoles((user !== false) ? user.roles : [])
 
   return (
     <>
