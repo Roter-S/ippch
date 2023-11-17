@@ -69,17 +69,16 @@ export default function AlertDelete ({ id, collectionName, onUpdate }: Props) {
             Esta acción no se puede deshacer.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ padding: 3 }}>
           <LoadingButton
             color="error"
-            sx={{ mt: 3, mb: 2 }}
             onClick={handleDelete as React.MouseEventHandler<HTMLButtonElement>}
             disabled={isSubmitting}
             loading={isSubmitting}
           >
             Aceptar
           </LoadingButton>
-          <Button color="primary" onClick={handleClose}>
+          <Button color="primary" variant="contained" onClick={handleClose}>
             Cancelar
           </Button>
         </DialogActions>

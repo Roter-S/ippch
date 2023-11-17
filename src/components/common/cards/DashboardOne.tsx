@@ -77,7 +77,7 @@ const DashboardOne = ({ isLoading, icon, value, title, backgroundColor, backgrou
                   sx={{
                     fontSize: '2.125rem',
                     fontWeight: 500,
-                    mr: 1,
+                    ml: 1,
                     mt: 1.75,
                     mb: 0.75
                   }}

@@ -49,4 +49,11 @@ interface Advertisement {
   groups: Groups[]
   ministries: Ministries[]
 }
-export type { Setting, Ministries, Groups, User, DataDocument, Advertisement }
+
+interface MemberAttendance {
+  id: string
+  memberAttendanceCount: number
+  attendanceTaker: User
+  createdAt: Timestamp
+}
+export type { Setting, Ministries, Groups, User, DataDocument, Advertisement, MemberAttendance }

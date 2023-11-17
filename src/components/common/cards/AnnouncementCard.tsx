@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { type Advertisement } from '../../../types/Types'
 import { useState } from 'react'
 import AlertDelete from '../AlertDelete'
+import EditIcon from '@mui/icons-material/Edit'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
@@ -74,6 +75,9 @@ export default function AnnouncementCard ({
           collectionName='advertisements'
           onUpdate={() => {}}
         />
+        <IconButton>
+          <EditIcon color="secondary" />
+        </IconButton>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

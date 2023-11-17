@@ -15,11 +15,21 @@ import { type Setting } from '../../../types/Types'
 import SkeletonNameApp from '../skeleton/SkeletonNameApp'
 import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import NewspaperIcon from '@mui/icons-material/Newspaper'
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl'
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism'
+import { useUserContext } from '../../../context/UserContext'
+
+interface Route {
+  title: string
+  icon: JSX.Element
+  to: string
+}
 
 const RoutesDrawer = () => {
   const location = useLocation()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [settings, setSettings] = useState<Setting[]>([])
+  const { user } = useUserContext()
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -33,6 +43,89 @@ const RoutesDrawer = () => {
     }
     void fetchSettings()
   }, [])
+
+  const generateRoutesBasedOnRoles = (roles: string[]): Route[] => {
+    let routes: Route[] = []
+    roles.forEach((role) => {
+      switch (role) {
+        case 'admin':
+          routes = routes.concat([
+            {
+              title: 'Dashboard',
+              icon: <DashboardIcon />,
+              to: '/admin/dashboard'
+            },
+            {
+              title: 'Usuarios',
+              icon: <GroupIcon />,
+              to: '/admin/users'
+            },
+            {
+              title: 'Ministerios',
+              icon: <AccountTreeIcon />,
+              to: '/admin/ministries'
+            },
+            {
+              title: 'Noticicias',
+              icon: <NewspaperIcon />,
+              to: '/admin/advertisements'
+            },
+            {
+              title: 'Asistencias',
+              icon: <ChecklistRtlIcon />,
+              to: '/admin/member-attendance'
+            },
+            {
+              title: 'Donaciones',
+              icon: <VolunteerActivismIcon />,
+              to: '/admin/donations'
+            }
+          ])
+          break
+        case 'leader':
+          routes = routes.concat([
+            {
+              title: 'Ministerios',
+              icon: <AccountTreeIcon />,
+              to: '/admin/ministries'
+            },
+            {
+              title: 'Noticicias',
+              icon: <NewspaperIcon />,
+              to: '/admin/advertisements'
+            }
+          ])
+          break
+        case 'attendance':
+          routes = routes.concat([
+            {
+              title: 'Noticicias',
+              icon: <NewspaperIcon />,
+              to: '/admin/advertisements'
+            },
+            {
+              title: 'Asistencias',
+              icon: <ChecklistRtlIcon />,
+              to: '/admin/member-attendance'
+            }
+          ])
+          break
+        default:
+          routes = routes.concat([
+            {
+              title: 'Noticicias',
+              icon: <NewspaperIcon />,
+              to: '/admin/advertisements'
+            }
+          ])
+          break
+      }
+    })
+
+    return routes
+  }
+
+  const userRoutes = generateRoutesBasedOnRoles(user.roles)
 
   return (
     <>
@@ -58,28 +151,7 @@ const RoutesDrawer = () => {
           </Stack>
         )}
       <List>
-        {[
-          {
-            title: 'Dashboard',
-            icon: <DashboardIcon />,
-            to: '/admin/dashboard'
-          },
-          {
-            title: 'Usuarios',
-            icon: <GroupIcon />,
-            to: '/admin/users'
-          },
-          {
-            title: 'Ministerios',
-            icon: <AccountTreeIcon />,
-            to: '/admin/ministries'
-          },
-          {
-            title: 'Noticicias',
-            icon: <NewspaperIcon />,
-            to: '/admin/advertisements'
-          }
-        ].map((text, index) => (
+        {userRoutes.map((text, index) => (
           <ListItem
             key={index}
             sx={{
