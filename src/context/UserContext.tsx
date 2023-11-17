@@ -14,7 +14,7 @@ interface User {
   id: string
   email: string | null
   photoURL: string | null
-  roles: string[] | null
+  roles: string[]
 }
 
 interface UserContextType {

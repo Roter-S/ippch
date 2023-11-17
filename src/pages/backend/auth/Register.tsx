@@ -22,7 +22,7 @@ import SignInWithGoogle from '../../../components/common/buttons/SignInWithGoogl
 export const Register = () => {
   const { user } = useUserContext()
 
-  useRedirectActiveUser(user, '/admin/dashboard')
+  useRedirectActiveUser(user)
 
   const onSubmit = async (
     { email, password }: { email: string, password: string },

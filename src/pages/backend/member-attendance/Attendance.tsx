@@ -13,7 +13,6 @@ import { auth } from '../../../services/firebase'
 import { createDocument, getDocument, getRef, updateDocument } from '../../../utils/firestoreUtils'
 import { useAlert } from '../../../context/AlertContext'
 import { type MemberAttendance } from '../../../types/Types'
-import { useState } from 'react'
 
 export async function loader ({ params }: { params: { attendanceId: string } }) {
   const attendance = await getDocument('memberAttendance', params.attendanceId)
